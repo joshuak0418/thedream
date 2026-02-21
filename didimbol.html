@@ -22,14 +22,9 @@
             transition: all 0.3s ease;
         }
         
-        /* Strong shadow for featured content matching summary cards visibility */
         .card-featured {
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(161, 136, 127, 0.2);
-        }
-
-        .card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         .chart-container {
@@ -51,8 +46,17 @@
         }
 
         .active-session {
-            border-left: 4px solid #8D6E63; 
-            background-color: #FAFAF9;
+            border-left: 6px solid #8D6E63; 
+            background-color: #FFFFFF;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .locked-nav-item {
+            cursor: default !important;
+            pointer-events: none;
+            background-color: rgba(255, 255, 255, 0.5);
+            opacity: 0.85; 
         }
 
         .question-item {
@@ -71,6 +75,30 @@
             max-height: 5000px; 
         }
 
+        #cute-warning {
+            position: fixed;
+            pointer-events: none;
+            background-color: #FFB300;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 20px;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            transform: translate(-50%, -100%) scale(0.5);
+        }
+        #cute-warning.show {
+            display: flex;
+            opacity: 1;
+            transform: translate(-50%, -120%) scale(1);
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -86,103 +114,70 @@
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col">
+<body class="antialiased min-h-screen flex flex-col text-left">
+
+    <div id="cute-warning">
+        <span>😮</span>
+        <span>분량이 많아요! 미리 미리 하세요!</span>
+        <span>📚</span>
+    </div>
 
     <header class="bg-[#5D4037] text-white py-8 px-4 shadow-lg">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1">2026 언약가족</h2>
-                    <h1 class="text-3xl md:text-4xl font-bold mb-2">언약가족 디딤돌</h1>
-                    <p class="text-[#EFEBE9] opacity-90 text-sm md:text-base max-w-2xl">
-                        하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 8주간의 여정입니다.
-                    </p>
-                </div>
-                <div class="bg-[#8D6E63] p-4 rounded-lg bg-opacity-90 backdrop-blur-sm border border-[#A1887F] min-w-[200px]">
-                    <div class="text-xs text-[#EFEBE9] uppercase tracking-wide mb-1">훈련 일정</div>
-                    <div class="font-bold text-lg">2월 22일 ~ 4월 19일</div>
-                    <div class="text-sm mt-1 flex items-center gap-2">
-                        <span>🕒 매 주일 오후 2:00</span>
-                    </div>
-                </div>
-            </div>
+        <div class="max-w-6xl mx-auto text-left">
+            <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1">2026 언약가족</h2>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 text-left">언약가족 디딤돌</h1>
+            <p class="text-[#EFEBE9] opacity-90 text-sm md:text-base max-w-2xl text-left">
+                하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 8주간의 여정입니다.
+            </p>
         </div>
     </header>
 
     <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full space-y-8">
 
-        <!-- Summary Section -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="card p-6 border-t-4 border-[#8D6E63]">
-                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center">
+        <!-- Summary Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <div class="card p-6 border-t-4 border-[#8D6E63] text-left">
+                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
                     <span class="text-xl mr-2">📚</span> 훈련 방법
                 </h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    일방적인 강의가 아닌, 능동적인 참여와 나눔 중심의 훈련입니다.
-                </p>
-                <ul class="space-y-3 text-sm">
-                    <li class="flex items-start">
-                        <span class="bg-[#EFEBE9] text-[#5D4037] rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">1</span>
-                        <span><strong>사전 준비:</strong> 매주 정해진 분량을 읽고 질문지에 답을 작성합니다.</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="bg-[#EFEBE9] text-[#5D4037] rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">2</span>
-                        <span><strong>토의:</strong> 작성한 답변을 바탕으로 깊이 있는 나눔을 갖습니다.</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="bg-[#EFEBE9] text-[#5D4037] rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">3</span>
-                        <span><strong>실습:</strong> 이론을 넘어 신앙의 습관을 형성합니다.</span>
-                    </li>
+                <ul class="space-y-3 text-sm text-left text-gray-700">
+                    <li><strong>사전 준비:</strong> 매주 정해진 분량의 교재 정독 및 과제 작성</li>
+                    <li><strong>함께하는 토의:</strong> 질문지를 바탕으로 공동체 안에서 나눔</li>
+                    <li><strong>영성 실습:</strong> 일대일 양육 및 삶의 현장 실습 병행</li>
                 </ul>
             </div>
 
-            <div class="card p-6 border-t-4 border-[#A1887F] shadow-lg">
-                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center">
+            <div class="card p-6 border-t-4 border-[#A1887F] shadow-lg text-left">
+                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
                     <span class="text-xl mr-2">🗺️</span> 연간 로드맵
                 </h3>
-                <div class="flex flex-col gap-4">
-                    <div class="bg-[#FAFAF9] p-3 rounded border border-gray-100">
-                        <div class="text-xs font-bold text-[#8D6E63] uppercase mb-1">1학기 (현재)</div>
-                        <div class="font-bold text-gray-800">기초 및 원리</div>
-                        <div class="text-xs text-gray-500 mt-1">복음의 본질, 제자도, 입문 영성훈련</div>
+                <div class="space-y-2 text-left">
+                    <div class="bg-[#FAFAF9] p-2 rounded border text-xs text-left">
+                        <span class="font-bold text-[#8D6E63]">1학기:</span> 복음의 기초 및 제자훈련 원리
                     </div>
-                    <div class="flex justify-center text-[#BCAAA4]">↓</div>
-                    <div class="bg-white p-3 rounded border border-gray-200 opacity-70">
-                        <div class="text-xs font-bold text-gray-500 uppercase mb-1">2학기 (예정)</div>
-                        <div class="font-bold text-gray-600">심화 및 실습</div>
-                        <div class="text-xs text-gray-500 mt-1">사역자 훈련, 집중 영성훈련</div>
+                    <div class="bg-white p-2 rounded border text-xs opacity-60 text-left">
+                        <span class="font-bold text-gray-400">2학기:</span> 본격적인 영성 훈련 및 사역 실습
                     </div>
                 </div>
             </div>
 
-            <div class="card p-6 border-t-4 border-[#D7CCC8]">
-                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center">
-                    <span class="text-xl mr-2">✅</span> 수료 조건 (필수)
+            <div class="card p-6 border-t-4 border-[#D7CCC8] text-left">
+                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
+                    <span class="text-xl mr-2">✅</span> 수료 조건
                 </h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between p-3 bg-[#F5F5F0] rounded">
-                        <span class="font-medium text-sm">출석</span>
-                        <span class="font-bold text-[#5D4037]">6회 이상</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3 bg-[#F5F5F0] rounded">
-                        <span class="font-medium text-sm">과제 제출</span>
-                        <span class="font-bold text-[#5D4037]">8회 (전체)</span>
-                    </div>
-                    <div class="bg-red-50 p-3 rounded border border-red-100 text-xs text-red-800 leading-relaxed">
-                        <strong>⚠️ 주의:</strong> 3월 1일은 휴강일이지만, 해당 주차의 <strong>독서 및 과제는 필히 제출</strong>해야 합니다.
-                    </div>
-                    <div class="text-xs text-gray-500 text-center">훈련비: 30,000원</div>
+                <div class="space-y-2 text-xs text-left text-gray-700">
+                    <p>• 출석: 총 8회 중 6회 이상</p>
+                    <p>• 과제: 8회 전체 제출 (휴강 주 포함)</p>
+                    <p class="text-red-500 font-bold">• 결석 시 보강 또는 대체 과제 필수</p>
                 </div>
             </div>
         </section>
 
-        <!-- Main Content Section -->
+        <!-- Main Dashboard -->
         <section>
-            <div class="flex flex-col md:flex-row justify-between items-end mb-4">
-                <div>
-                    <h3 class="text-2xl font-bold text-[#3E2723]">학습 일정 및 독서량</h3>
-                    <p class="text-sm text-gray-500 mt-1">주차를 클릭하여 이번 주 훈련 상세 정보를 확인하세요.</p>
-                </div>
+            <div class="mb-4 text-left">
+                <h3 class="text-2xl font-bold text-[#3E2723]">실시간 훈련 가이드</h3>
+                <p class="text-sm text-[#8D6E63] font-bold">"중간에 꺾이지 않는 마음이 중요합니다 (현재 날짜에 맞춰 자동 활성화됩니다)"</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -190,45 +185,55 @@
                 <!-- Left Nav -->
                 <div class="lg:col-span-5 relative">
                     <div class="timeline-line"></div>
-                    <div class="space-y-4 relative z-10" id="schedule-list">
+                    <div id="schedule-list" class="space-y-4 relative z-10">
                     </div>
                 </div>
 
-                <!-- Right View -->
-                <div class="lg:col-span-7 flex flex-col gap-8">
+                <!-- Right Content -->
+                <div class="lg:col-span-7 flex flex-col gap-8 text-left">
                     
-                    <!-- Training Focus Card - Added 'card-featured' for deeper shadow -->
                     <div id="detail-card" class="card card-featured p-8 min-h-[220px]">
-                        <div class="mb-6">
-                            <h2 id="detail-main-title" class="text-3xl font-bold text-[#3E2723] mb-1">이번 주 훈련</h2>
-                            <p id="detail-meta" class="text-sm text-gray-500 mb-2 font-medium">날짜 | 페이지 범위</p>
+                        <div class="mb-6 text-left">
+                            <h2 id="detail-main-title" class="text-3xl font-bold text-[#3E2723] mb-1 text-left">이번 주 훈련</h2>
+                            <p id="detail-meta" class="text-sm text-gray-500 font-medium text-left">날짜 | 페이지 범위</p>
                         </div>
                         
-                        <div class="bg-[#FAFAF9] p-6 rounded-lg mb-4 border border-gray-100">
-                            <h4 id="detail-session-name" class="text-xl font-bold text-gray-800 mb-4 underline decoration-[#D7CCC8] decoration-4 underline-offset-4">세션명</h4>
-                            <p id="detail-desc" class="text-base text-gray-600 leading-relaxed">내용 설명</p>
+                        <div class="bg-[#FAFAF9] p-6 rounded-lg mb-4 border border-gray-100 text-left">
+                            <h4 id="detail-session-name" class="text-xl font-bold text-gray-800 mb-4 underline decoration-[#D7CCC8] decoration-4 underline-offset-4 text-left">세션명</h4>
+                            <p id="detail-desc" class="text-base text-gray-600 leading-relaxed text-left">내용 설명</p>
                         </div>
-                        <div class="flex items-center gap-2 text-xs text-gray-500 bg-white border border-gray-200 p-2 rounded w-fit">
-                            <span>📖 범위:</span>
-                            <span id="detail-range" class="font-medium text-gray-800">범위 표시</span>
-                            <span id="detail-pages" class="ml-2 bg-[#EFEBE9] px-1 rounded text-[#5D4037]">0쪽</span>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2 text-xs text-gray-800 bg-white border border-gray-200 p-2 rounded w-fit text-left font-medium">
+                                <span>📖 범위:</span>
+                                <span id="detail-range" class="font-bold">범위 표시</span>
+                                <span id="detail-pages" class="ml-2 bg-[#EFEBE9] px-1 rounded text-[#5D4037]">0쪽</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-blue-700 bg-blue-50 border border-blue-100 p-2 rounded w-fit font-bold text-left">
+                                <span>📅 하루 권장 독서량:</span>
+                                <span id="detail-daily-avg">0쪽</span>
+                                <span class="text-[10px] font-normal opacity-70">(6일 기준)</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Assignments Archive -->
-                    <div class="space-y-4">
-                        <h3 class="text-xl font-bold text-[#5D4037] flex items-center gap-2">
+                    <!-- Assignments Section -->
+                    <div class="space-y-4 text-left">
+                        <h3 class="text-xl font-bold text-[#5D4037] flex items-center gap-2 text-left">
                             <span>📝</span> 주차별 과제물 아카이브
                         </h3>
-                        <div id="assignments-archive-container" class="space-y-4">
-                            <!-- JS Populated -->
+                        
+                        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r shadow-sm text-left">
+                            <h5 class="text-amber-800 font-bold text-sm mb-1 flex items-center gap-2 text-left">💡 과제 수행 가이드</h5>
+                            <p class="text-sm text-amber-900 leading-relaxed text-left">정답 찾기가 아닙니다. 책을 읽으면서 충분히 생각하고, 질문에 대한 나만의 답을 정리해서 제출해 주세요. (모든 주차 클릭 가능)</p>
+                        </div>
+
+                        <div id="assignments-archive-container" class="space-y-4 text-left">
                         </div>
                     </div>
 
-                    <!-- Chart -->
                     <div class="card p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="font-bold text-gray-700">📊 주차별 독서 부하량 (페이지)</h4>
+                        <div class="flex justify-between items-center mb-4 text-left">
+                            <h4 class="font-bold text-gray-700 text-sm text-left">📊 주차별 독서 부하량 (페이지)</h4>
                             <span class="text-xs text-gray-400">성장과 성숙을 위한 거룩한 부담감</span>
                         </div>
                         <div class="chart-container">
@@ -244,148 +249,99 @@
 
     <footer class="bg-[#3E2723] text-[#D7CCC8] py-10 mt-12 text-center">
         <p class="text-sm">2026 언약가족 디딤돌</p>
-        <p class="text-xs opacity-50 mt-2">함께 지어져 가는 소망의 공동체</p>
+        <p class="text-xs opacity-50 mt-2 text-center">함께 지어져 가는 소망의 공동체</p>
     </footer>
 
     <script>
         const scheduleData = [
             {
                 id: 1,
-                part: "I부: 붙들어야 한다 (잃어버린 진리)",
                 date: "2월 22일",
                 range: "서론 + 1장",
                 pageString: "p.12~61",
-                title: "서론 + 1장: 들어가며 + 예수, 생명의 밥",
-                desc: "한국 교회의 위기 진단과 예수 복음의 본질을 직시합니다.",
+                title: "1주차: 들어가며 + 예수, 생명의 밥",
+                desc: "한국 교회의 위기 진단과 예수 복음의 본질을 직시하며 제자훈련의 필요성을 배웁니다.",
                 pages: 50,
-                type: "session",
                 questions: [
-                    { cat: "서론", q: "저자는 \"기독교가 원래부터 견지해온 메시지 그 자체에\" 생존의 길이 있다고 합니다. 그렇다면 왜 그 메시지를 이미 알고 있는 한국 교회가 위기에 처했을까요? 저자의 분석을 근거로 설명하십시오." },
-                    { cat: "서론", q: "저자는 1세대 제자훈련이 \"성경에 기초했으나, 성경 전체의 메시지가 아니라 한 부분에 기초했다\"고 말합니다. '복음'에는 기초했으나 '하나님나라'를 놓쳤다는 것이 구체적으로 어떤 차이를 만들었습니까? 저자가 지적하는 결과들을 찾아 쓰십시오." },
-                    { cat: "서론", q: "저자는 '학생'과 '제자'를 구분하면서, 제자훈련의 본질적 특성이 '재생산'이라고 말합니다. 그런데 왜 목회자가 가르치는 것으로 끝나는 훈련은 제자훈련이 아니라 '리더십 훈련 코스'에 불과한 것입니까? 저자의 논리를 따라 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "저자는 '아르토스'의 정확한 번역이 '떡'이나 '빵'이 아니라 '밥'이라고 주장합니다. 단순한 번역 문제가 아니라 이 번역의 차이가 신앙 이해에 어떤 영향을 준다고 생각합니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "저자가 제시하는 네 가지 현상(반찬에 묻히다, 외식으로 대체되다, 밥맛이 똑같아지다, 식기 자랑에 밀리다) 중 서로 가장 깊이 연결되어 있다고 생각하는 두 가지를 고르고, 왜 그렇게 생각하는지 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "\"예수를 주로 고백하고 예수를 노래하고 예수의 이름으로 기도하지만, 더 이상 예수를 알아가고 흠모하지 않는다\"고 합니다. 예수를 '언급하는 것'과 예수를 '알아가는 것'은 어떻게 다릅니까? 저자의 본문 내용을 근거로 이 차이를 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "저자는 생명의 밥의 세 가지 의미(살리는 밥, 살아가게 하는 밥, 살아 있는 밥)를 제시합니다. 이 셋의 순서가 중요한 이유는 무엇이며, 셋 중 하나라도 빠지면 어떤 문제가 생깁니까? 저자의 경고를 근거로 답하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "마가복음 1:15에서 '회개'는 단순히 잘못을 뉘우치는 것이 아니라 '방향 전환'이라고 저자는 설명합니다. 그런데 인간은 스스로 방향을 돌이킨다고 해서 하나님나라에 들어갈 수 없다고도 합니다. 이 모순처럼 보이는 두 주장이 어떻게 연결됩니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "저자는 하나님나라에 속하면 \"어떤 면에서 세상살이가 좀 더 어려워진다\"고 말하면서, 동시에 \"넉넉히 이긴다\"(롬 8:36-37)고 합니다. 이 두 가지가 동시에 가능한 이유를 저자의 논리로 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "저자는 부활한 예수를 직접 만나지 못한 초대교회 다음 세대가 예수를 뜨겁게 사랑할 수 있었던 비밀이 있다고 합니다. 그 비밀은 무엇이며, 이것이 오늘날 우리에게도 동일하게 가능하다고 저자가 주장하는 근거는 무엇입니까?" },
-                    { cat: "적용 질문", q: "네 가지 현상(반찬에 묻히다, 외식으로 대체되다, 밥맛이 똑같아지다, 식기 자랑에 밀리다) 중 나의 신앙생활에 가장 해당되는 것은 무엇입니까? 구체적인 예를 들고, 그것이 나의 신앙에 어떤 영향을 주고 있는지 나누어 보십시오." },
-                    { cat: "적용 질문", q: "저자는 \"내가 믿고 경험한, 내 삶과 인격에 흔적을 남긴 예수\"를 이야기합니다. 나는 이런 예수를 고백할 수 있습니까? 최근 삶에서 경험한 구체적 사례를 나누거나, 없다면 그 이유가 무엇인지 솔직하게 나누어 보십시오." }
+                    { cat: "서론", q: "저자는 \"기독교가 원래부터 견지해온 메시지 그 자체에\" 생존의 길이 있다고 합니다. 한국 교회가 왜 위기에 처했을까요? 저자의 분석을 근거로 설명하십시오." },
+                    { cat: "서론", q: "저자는 1세대 제자훈련이 \"성경 전체의 메시지가 아니라 한 부분에 기초했다\"고 말합니다. '복음'에는 기초했으나 '하나님나라'를 놓쳤다는 것이 어떤 차이를 만들었습니까?" },
+                    { cat: "서론", q: "저자는 '학생'과 '제자'를 구분하면서, 제자훈련의 본질적 특성이 '재생산'이라고 말합니다. 왜 목회자가 가르치는 것으로 끝나는 것은 제자훈련이 아닐까요?" },
+                    { cat: "1장: 예수, 생명의 밥", q: "저자는 '아르토스'의 정확한 번역이 '떡'이나 '빵'이 아니라 '밥'이라고 주장합니다. 이 번역의 차이가 신앙 이해에 어떤 영향을 준다고 생각합니까?" },
+                    { cat: "1장: 예수, 생명의 밥", q: "제시된 네 가지 현상(반찬에 묻히다, 외식으로 대체되다, 밥맛이 똑같아지다, 식기 자랑에 밀리다) 중 서로 깊이 연결되어 있다고 생각하는 두 가지를 고르고 이유를 설명하십시오." },
+                    { cat: "1장: 예수, 생명의 밥", q: "예수를 '언급하는 것'과 예수를 '알아가는 것'은 어떻게 다릅니까? 저자의 본문 내용을 근거로 이 차이를 설명하십시오." },
+                    { cat: "1장: 예수, 생명의 밥", q: "생명의 밥의 세 가지 의미(살리는 밥, 살아가게 하는 밥, 살아 있는 밥) 중 하나라도 빠지면 어떤 문제가 생깁니까?" },
+                    { cat: "1장: 예수, 생명의 밥", q: "마가복음 1:15에서 '회개'는 단순히 잘못을 뉘우치는 것이 아니라 '방향 전환'이라고 설명합니다. 인간은 스스로 방향을 돌이킨다고 해서 하나님나라에 들어갈 수 없다고도 합니다. 이 두 주장이 어떻게 연결됩니까?" },
+                    { cat: "1장: 예수, 생명의 밥", q: "하나님나라에 속하면 \"어떤 면에서 세상살이가 좀 더 어려워진다\"고 말하면서, 동시에 \"넉넉히 이긴다\"고 합니다. 이 두 가지가 동시에 가능한 이유를 설명하십시오." },
+                    { cat: "1장: 예수, 생명의 밥", q: "부활한 예수를 직접 만나지 못한 초대교회 다음 세대가 예수를 뜨겁게 사랑할 수 있었던 비밀은 무엇입니까?" },
+                    { cat: "적용 질문", q: "네 가지 현상 중 나의 신앙생활에 가장 해당하는 것은 무엇입니까? 구체적인 예를 들고, 그것이 나의 신앙에 어떤 영향을 주고 있는지 나누어 보십시오." },
+                    { cat: "적용 질문", q: "나는 \"내 삶과 인격에 흔적을 남긴 예수\"를 고백할 수 있습니까? 최근 삶에서 경험한 구체적 사례를 나누어 보십시오." }
                 ]
             },
             {
-                id: "break",
-                part: "I부: 붙들어야 한다 (잃어버린 진리)",
-                date: "3월 1일",
-                range: "2장 (독서 진행)",
-                pageString: "p.62~97",
-                title: "헌신가족 수련회 (휴강)",
-                desc: "모임은 없으나, **2장 독서와 과제는 반드시 제출**하셔야 합니다. 수련회 기간 중 하나님의 은혜를 누리며 복습하시기 바랍니다.",
-                pages: 36,
-                type: "break",
-                questions: [] 
-            },
-            {
                 id: 2,
-                part: "I부: 붙들어야 한다 (잃어버린 진리)",
                 date: "3월 8일",
                 range: "2장",
                 pageString: "p.62~97",
-                title: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑",
-                desc: "구원 이전의 실체와 하나님의 은혜를 나눕니다.",
+                title: "2장 (휴강주차): 구원, 하나님의 사랑",
+                desc: "3월 1일은 휴강이지만 2장 독서 과제는 필수입니다. 구원의 본질을 사진이 아닌 생생한 체험으로 마주하며, 허물과 죄로 죽었던 우리가 어떻게 다시 살아났는지 묵상합니다.",
                 pages: 36,
-                type: "session",
                 questions: [
                     { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "저자는 나이아가라 폭포를 사진으로 아는 것과 현장에서 경험하는 것은 다르다고 말합니다. 그렇다면 구원을 '사진으로만 알고 있는' 그리스도인의 구체적 모습은 어떤 것이며, 그가 놓치고 있는 것은 정확히 무엇입니까?" },
                     { cat: "2장", q: "바울은 구원 이전의 인간을 \"허물과 죄로 죽었다\"고 선언합니다. 저자는 이 '죽음'이 도덕적 실패가 아니라 영적 상태라고 설명합니다. 스스로 괜찮다고 느끼는 사람이 왜 오히려 심각한 상태일 수 있는지 설명하십시오." },
                     { cat: "2장", q: "저자는 죄를 나무에 비유하면서, 겉으로 드러나는 죄의 행위(잎사귀)만 다루는 것이 왜 근본 해결이 안 되는지를 보여줍니다. '잎사귀만 다루는' 신앙생활의 구체적 예는 무엇이며, '뿌리'를 다루는 것은 어떻게 다릅니까?" },
-                    { cat: "2장", q: "에베소서 2:1-3과 4절 사이에는 '그러나'라는 한 단어가 있습니다. 만약 이 '그러나'가 없다면, 기독교는 다른 종교의 자기 수양과 무엇이 다를 수 있겠습니까?" },
+                    { cat: "2장", q: "에베소서 2:1-3과 4절 사이에는 '그러나'라는 한 단어가 있습니다. 만약 이 '그러나'가 없다면, 즉 인간의 상태 진단만 있고 하나님의 개입이 없다면, 기독교는 다른 종교의 자기 수양과 무엇이 다를 수 있겠습니까?" },
                     { cat: "2장", q: "바울은 우리가 그리스도와 함께 '살아나고', '일으켜 세워지고', '하늘에 앉았다'고 과거 시제로 선언합니다. 현실의 우리는 여전히 죄를 짓고 약합니다. 저자는 이 괴리를 어떻게 설명하며, 이 괴리 앞에서 취해야 할 태도는 무엇입니까?" },
                     { cat: "2장", q: "저자는 고급 승용차를 선물 받고도 트렁크의 공구함에만 마음을 빼앗기는 비유를 듭니다. 이 비유에서 '승용차'와 '공구함'은 각각 무엇을 가리키며, 오늘날 그리스도인의 가장 흔한 모습은 무엇입니까?" },
                     { cat: "2장", q: "저자에 따르면, 성경이 말하는 믿음은 '하나님께서 하신 일에 대한 전인격적 반응'입니다. 한국 교회에서 '세게 믿으면 이루어진다'는 믿음과 이 전인격적 반응으로서의 믿음은 방향과 목적에서 어떻게 다릅니까?" },
                     { cat: "2장", q: "저자는 물에 빠진 사람이 던져준 밧줄을 잡고 살았는데 \"내가 밧줄을 잘 잡아서 살았다\"고 말하는 사람은 없다고 합니다. 많은 그리스도인의 간증 구조가 9절(\"자랑할 수 없다\")과 어떻게 상충되는지 논하십시오." },
-                    { cat: "2장", q: "구원받은 자에게 일어나는 세 가지 변화(정체감, 사명감, 소속감)를 설명합니다. 만약 새로운 정체감은 있으나 소속감이 없는 사람, 또는 소속감은 있으나 사명감이 없는 사람이 있다면 신앙은 어떤 모습이 되겠습니까?" },
+                    { cat: "2장", q: "구원받은 자에게 일어나는 세 가지 변화(정체감, 사명감, 소속감)를 설명합니다. 만약 새로운 정체감은 있으나 소속감이 없는 사람, 또는 소속감은 있으나 사명감이 없는 사람이 있다면, 그의 신앙은 어떤 모습이 되겠습니까?" },
                     { cat: "2장", q: "저자는 1세기 팔레스타인의 국지적 사건이 2천 년을 건너 우리에게 왔다는 사실에 감격합니다. 이것이 구원받은 자가 '왜 전도하고 선교해야 하는가'에 대한 본질적 답이 되는 이유를 설명하십시오." },
                     { cat: "적용 질문", q: "하나님 말씀을 진심으로 들은 사람은 '기뻐함', '재헌신', '받아들임', '거절' 중 하나로 반응한다고 합니다. 2장을 읽은 지금 나는 어디에 해당하며, 왜 그런 반응이 나옵니까?" },
                     { cat: "적용 질문", q: "저자는 믿음을 번지점프(결단)와 수영(훈련)에 비유합니다. 나는 구원의 풍성함을 '물 위에 떠 있기만 하는 수준'으로 누리고 있습니까, 아니면 '헤엄쳐 나아가는 수준'입니까? 무엇이 더 필요합니까?" }
                 ]
             },
-            {
-                id: 3,
-                part: "I부: 붙들어야 한다 (잃어버린 진리)",
-                date: "3월 15일",
-                range: "3~4장",
-                pageString: "p.98~167",
-                title: "3-4장: 하나님나라 + 제자훈련의 비밀",
-                desc: "제자훈련의 본질과 재생산의 원리를 탐구합니다.",
-                pages: 70,
-                type: "session",
-                questions: [{ cat: "준비 중", q: "3-4장 질문지가 곧 업데이트됩니다." }]
-            },
-            {
-                id: 4,
-                part: "II부: 뿌리내려야 한다 (하나님나라 복음)",
-                date: "3월 22일",
-                range: "5~6장",
-                pageString: "p.170~247",
-                title: "5-6장: 하나님나라 복음: 로마서 1-8장",
-                desc: "로마서를 통해 하나님나라 복음의 신학적 기초를 다집니다.",
-                pages: 78,
-                type: "session",
-                questions: [{ cat: "준비 중", q: "5-6장 질문지가 곧 업데이트됩니다." }]
-            },
-            {
-                id: 5,
-                part: "II부: 뿌리내려야 한다 (하나님나라 복음)",
-                date: "3월 29일",
-                range: "7~8장",
-                pageString: "p.250~333",
-                title: "7-8장: 하나님나라, 구원, 성령, 교회, 세상",
-                desc: "성령의 역할과 교회 백성의 삶을 배웁니다.",
-                pages: 84,
-                type: "session",
-                questions: [{ cat: "준비 중", q: "7-8장 질문지가 곧 업데이트됩니다." }]
-            },
-            {
-                id: 6,
-                part: "III부: 깊어져야 한다 (제자의 삶)",
-                date: "4월 5일",
-                range: "9~10장",
-                pageString: "p.336~423",
-                title: "9-10장: 영성과 복음 전수하는 삶",
-                desc: "영적 성장의 단계와 복음 전수 방법론을 익힙니다.",
-                pages: 88,
-                type: "session",
-                questions: [{ cat: "준비 중", q: "9-10장 질문지가 곧 업데이트됩니다." }]
-            },
-            {
-                id: 7,
-                part: "III부: 깊어져야 한다 (제자의 삶)",
-                date: "4월 12일",
-                range: "11~12장",
-                pageString: "p.424~497",
-                title: "11-12장: 한 사람 세우기 + 깊어지는 삶",
-                desc: "일대일 양육의 실제를 배우고 깊이를 더합니다.",
-                pages: 74,
-                type: "session",
-                questions: [{ cat: "준비 중", q: "11-12장 질문지가 곧 업데이트됩니다." }]
-            },
-            {
-                id: 8,
-                part: "III부: 깊어져야 한다 (제자의 삶)",
-                date: "4월 19일",
-                range: "13~14장 + 마치며",
-                pageString: "p.500~571",
-                title: "13-14장: 소망의 공동체 및 전체 마무리",
-                desc: "초대교회 사례를 통해 비전을 공유합니다.",
-                pages: 72,
-                type: "session",
-                questions: [{ cat: "준비 중", q: "마지막 질문지가 곧 업데이트됩니다." }]
-            }
+            { id: 3, date: "3월 15일", range: "3~4장", pageString: "p.98~167", title: "3주차: 하나님나라 + 제자훈련의 본질", desc: "하나님나라의 복음 전수와 제자훈련의 재생산 원리를 탐구합니다.", pages: 70, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
+            { id: 4, date: "3월 22일", range: "5~6장", pageString: "p.170~247", title: "4주차: 로마서로 보는 복음의 기초", desc: "로마서를 통해 하나님나라 복음의 신학적 기초를 다집니다.", pages: 78, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
+            { id: 5, date: "3월 29일", range: "7~8장", pageString: "p.250~333", title: "5주차: 성령, 교회, 그리고 세상", desc: "성령 안에서 살아가는 교회와 세상 속 그리스도인의 정체성을 묵상합니다.", pages: 84, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
+            { id: 6, date: "4월 5일", range: "9~10장", pageString: "p.336~423", title: "6주차: 영성과 복음 전수하는 삶", desc: "영적 성장의 원리와 복음을 흘려보내는 전수자의 삶을 배웁니다.", pages: 88, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
+            { id: 7, date: "4월 12일", range: "11~12장", pageString: "p.424~497", title: "7주차: 한 사람 세우기 (일대일 양육)", desc: "일대일 양육의 실제와 영적 깊이를 더하는 원리를 배웁니다.", pages: 74, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
+            { id: 8, date: "4월 19일", range: "13~14장", pageString: "p.500~571", title: "8주차: 소망의 공동체 및 전체 마무리", desc: "공동체 비전을 공유하며 8주간의 제자훈련을 마무리합니다.", pages: 72, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] }
         ];
 
-        let selectedIndex = 0;
+        let activeIndex = 0; 
+
+        function parseScheduleDate(dateStr) {
+            const matches = dateStr.match(/(\d+)월\s*(\d+)일/);
+            if (!matches) return null;
+            return new Date(2026, parseInt(matches[1]) - 1, parseInt(matches[2]));
+        }
+
+        function getInitialSelectedIndex() {
+            const now = new Date();
+            let idx = 0;
+            for (let i = 0; i < scheduleData.length; i++) {
+                const sessionDate = parseScheduleDate(scheduleData[i].date);
+                if (sessionDate && now >= new Date(sessionDate.getTime() - 7 * 24 * 60 * 60 * 1000)) {
+                    idx = i;
+                } else {
+                    break;
+                }
+            }
+            return idx;
+        }
+
+        function showCuteWarning(x, y) {
+            const warning = document.getElementById('cute-warning');
+            if (!warning) return;
+            warning.style.left = `${x}px`;
+            warning.style.top = `${y}px`;
+            warning.style.display = 'flex';
+            setTimeout(() => warning.classList.add('show'), 10);
+            setTimeout(() => {
+                warning.classList.remove('show');
+                setTimeout(() => warning.style.display = 'none', 200);
+            }, 3000);
+        }
 
         function toggleAssignment(idx) {
             const allAssignmentCards = document.querySelectorAll('[id^="assignment-card-"]');
@@ -396,13 +352,13 @@
 
             allAssignmentCards.forEach(card => {
                 card.classList.remove('assignment-open');
-                const arrow = card.querySelector('button span:last-child');
+                const arrow = card.querySelector('.rotate-180');
                 if (arrow) arrow.classList.remove('rotate-180');
             });
 
             if (!isClosing) {
                 targetCard.classList.add('assignment-open');
-                const arrow = targetCard.querySelector('button span:last-child');
+                const arrow = targetCard.querySelector('button span.arrow-icon');
                 if (arrow) arrow.classList.add('rotate-180');
             }
         }
@@ -412,25 +368,33 @@
             if (!listEl) return;
             listEl.innerHTML = '';
             scheduleData.forEach((item, index) => {
-                const isSelected = index === selectedIndex;
-                const isBreak = item.type === 'break';
+                const isActive = index === activeIndex;
                 const div = document.createElement('div');
-                div.className = `cursor-pointer relative pl-8 py-3 pr-4 rounded transition-all duration-200 group ${isSelected ? 'active-session shadow-sm' : 'hover:bg-gray-50'}`;
-                div.onclick = () => selectSession(index);
+                div.className = `relative pl-8 py-4 pr-4 rounded transition-all duration-200 text-left ${
+                    isActive ? 'active-session' : 'locked-nav-item'
+                }`;
+
                 const dot = document.createElement('div');
-                dot.className = `absolute left-[1.25rem] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transform -translate-x-1/2 transition-colors ${isBreak ? 'bg-red-50 border-red-300' : isSelected ? 'bg-[#8D6E63] border-[#5D4037]' : 'bg-white border-gray-300 group-hover:border-[#8D6E63]'}`;
+                dot.className = `absolute left-[1.25rem] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transform -translate-x-1/2 transition-colors ${
+                    isActive ? 'bg-[#8D6E63] border-[#5D4037]' : 'bg-gray-200 border-gray-300'
+                }`;
+
+                const statusTag = isActive ? '⭐ 진행 중' : (index < activeIndex ? '✅ 완료' : '⌛ 진행 예정');
+                const pageVolumeText = `${item.pageString} (${item.pages}p 분량)`;
+
                 div.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <div class="flex-grow">
-                            <span class="text-[10px] font-bold ${isBreak ? 'text-red-400' : 'text-gray-400'} uppercase tracking-wide">${isBreak ? '휴강 주간' : 'Week ' + item.id}</span>
-                            <h4 class="font-bold text-[#3E2723] text-sm md:text-base leading-tight">${item.title.split(':')[0]}</h4>
-                            <div class="text-[11px] text-gray-500 mt-0.5 flex items-center gap-1">
-                                <span>📖 ${item.pages} 페이지</span>
-                                ${isBreak ? '<span class="text-red-500 font-bold ml-1">(!과제필수)</span>' : ''}
+                    <div class="flex justify-between items-center text-left">
+                        <div class="flex-grow text-left">
+                            <span class="text-[10px] font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} uppercase tracking-wide">
+                                ${statusTag}
+                            </span>
+                            <h4 class="font-bold text-[#3E2723] text-sm md:text-base leading-tight text-left">${item.title}</h4>
+                            <div class="text-[11px] text-gray-800 font-medium mt-1 text-left">
+                                📖 ${pageVolumeText}
                             </div>
                         </div>
                         <div class="text-right ml-2 min-w-[50px]">
-                            <div class="text-xs font-mono text-[#8D6E63] font-bold">${item.date}</div>
+                            <div class="text-xs font-mono font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'}">${item.date}</div>
                         </div>
                     </div>
                 `;
@@ -445,49 +409,44 @@
             archiveContainer.innerHTML = '';
             
             scheduleData.forEach((item, index) => {
-                if (item.id === 'break') return;
-
-                const cardId = `assignment-card-${index}`;
-                const isOpenOnLoad = (index === 0);
-                
+                const isActive = index === activeIndex;
                 const cardDiv = document.createElement('div');
-                cardDiv.id = cardId;
-                cardDiv.className = `card border border-[#D7CCC8] overflow-hidden ${isOpenOnLoad ? 'assignment-open' : ''}`;
+                cardDiv.id = `assignment-card-${index}`;
+                cardDiv.className = `card border border-[#D7CCC8] overflow-hidden ${isActive ? 'assignment-open' : ''}`;
                 
                 let questionsHTML = '';
                 let currentCat = '';
                 item.questions.forEach((qObj, qIdx) => {
                     if (qObj.cat !== currentCat) {
                         currentCat = qObj.cat;
-                        questionsHTML += `<div class="font-bold text-[#5D4037] text-base uppercase mt-6 mb-3 bg-[#EFEBE9] px-3 py-1.5 rounded inline-block border-l-4 border-[#8D6E63]">${currentCat}</div>`;
+                        questionsHTML += `<div class="font-bold text-[#5D4037] text-base uppercase mt-6 mb-3 bg-[#EFEBE9] px-3 py-1.5 rounded inline-block border-l-4 border-[#8D6E63] text-left">${currentCat}</div>`;
                     }
                     questionsHTML += `
-                        <div class="question-item py-5 flex gap-5">
-                            <span class="text-[#8D6E63] font-bold min-w-[28px] text-xl">${qIdx + 1}.</span>
-                            <p class="text-black font-medium leading-relaxed text-lg">${qObj.q}</p>
+                        <div class="question-item py-6 flex gap-5 text-left">
+                            <span class="text-[#8D6E63] font-bold min-w-[28px] text-xl text-left">${qIdx + 1}.</span>
+                            <p class="text-black font-medium leading-relaxed text-lg text-left">${qObj.q}</p>
                         </div>
                     `;
                 });
 
-                let titleLabel = `${item.id}주차 과제물`;
-                if (item.id === 2) {
-                    titleLabel = `2주차 과제물 (휴강기간)`;
-                }
+                const dailyAvg = (item.pages / 6).toFixed(1);
 
                 cardDiv.innerHTML = `
-                    <button onclick="toggleAssignment(${index})" class="w-full flex items-center justify-between p-6 bg-[#FAFAF9] hover:bg-[#F5F5F0] transition-colors border-b border-gray-100 text-left">
-                        <div class="flex items-center">
-                            <span class="text-2xl mr-4">📝</span>
+                    <button onclick="toggleAssignment(${index})" class="w-full flex items-center justify-between p-7 bg-[#FAFAF9] hover:bg-[#F5F5F0] transition-colors border-b border-gray-100 text-left">
+                        <div class="flex items-center text-left">
+                            <span class="text-2xl mr-4">${isActive ? '📝' : '📖'}</span>
                             <div class="text-left">
-                                <h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1">${titleLabel}</h4>
-                                <p class="text-sm text-gray-500 font-medium mb-1">${item.date} | ${item.pageString}</p>
-                                <p class="text-xs text-[#8D6E63] font-bold">(${item.part})</p>
+                                <h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1 text-left">${item.id}주차 과제물</h4>
+                                <div class="flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-800 font-medium text-left">
+                                    <span>${item.date} | ${item.pageString}</span>
+                                    <span class="text-blue-700 font-bold">| 하루 ${dailyAvg}p씩</span>
+                                </div>
                             </div>
                         </div>
-                        <span class="text-2xl text-[#8D6E63] transition-transform duration-300 ${isOpenOnLoad ? 'rotate-180' : ''}">▼</span>
+                        <span class="arrow-icon text-2xl text-[#8D6E63] transition-transform duration-300 ${isActive ? 'rotate-180' : ''}">▼</span>
                     </button>
-                    <div class="assignment-content">
-                        <div class="p-8 space-y-6">
+                    <div class="assignment-content text-left">
+                        <div class="p-8 space-y-2 text-left">
                             ${questionsHTML}
                         </div>
                     </div>
@@ -497,44 +456,27 @@
         }
 
         function updateDetailView() {
-            const item = scheduleData[selectedIndex];
+            const item = scheduleData[activeIndex];
             const detailCardEl = document.getElementById('detail-card');
             if (!detailCardEl) return;
-            detailCardEl.style.opacity = '0.5';
+            
+            const mainTitle = document.getElementById('detail-main-title');
+            const meta = document.getElementById('detail-meta');
+            const sName = document.getElementById('detail-session-name');
+            const desc = document.getElementById('detail-desc');
+            const range = document.getElementById('detail-range');
+            const pCount = document.getElementById('detail-pages');
+            const dailyAvgEl = document.getElementById('detail-daily-avg');
 
-            setTimeout(() => {
-                const mainTitle = document.getElementById('detail-main-title');
-                const meta = document.getElementById('detail-meta');
-                const sName = document.getElementById('detail-session-name');
-                const desc = document.getElementById('detail-desc');
-                const range = document.getElementById('detail-range');
-                const pCount = document.getElementById('detail-pages');
-
-                // Title update: Removed the part information as requested
-                if (mainTitle) mainTitle.textContent = "이번 주 훈련";
-                
-                if (meta) meta.textContent = `${item.date} | ${item.pageString}`;
-                if (sName) sName.textContent = item.title;
-                if (desc) desc.innerHTML = item.desc.replace(/\*\*(.*?)\*\*/g, '<strong class="text-red-600">$1</strong>');
-                if (range) range.textContent = item.range;
-                if (pCount) pCount.textContent = `${item.pages}쪽`;
-
-                if (item.type === 'break') {
-                    detailCardEl.style.backgroundColor = '#FEF2F2'; // bg-red-50
-                    detailCardEl.style.borderColor = '#FECACA'; // border-red-200
-                } else {
-                    detailCardEl.style.backgroundColor = '#FFFFFF';
-                    detailCardEl.style.borderColor = 'rgba(161, 136, 127, 0.2)';
-                }
-                highlightChart(selectedIndex);
-                detailCardEl.style.opacity = '1';
-            }, 100);
-        }
-
-        function selectSession(index) {
-            selectedIndex = index;
-            renderScheduleList();
-            updateDetailView();
+            if (mainTitle) mainTitle.textContent = "이번 주 훈련";
+            if (meta) meta.textContent = `${item.date} | ${item.pageString}`;
+            if (sName) sName.textContent = item.title;
+            if (desc) desc.innerHTML = item.desc.replace(/\*\*(.*?)\*\*/g, '<strong class="text-red-600">$1</strong>');
+            if (range) range.textContent = item.range;
+            if (pCount) pCount.textContent = `${item.pages}쪽`;
+            
+            const avg = (item.pages / 6).toFixed(1);
+            if (dailyAvgEl) dailyAvgEl.textContent = `${avg}쪽`;
         }
 
         let workloadChart;
@@ -542,24 +484,35 @@
             const canvas = document.getElementById('workloadChart');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            const labels = scheduleData.map(d => d.type === 'break' ? '휴강' : `Week ${d.id}`);
+            const labels = scheduleData.map(d => `W${d.id}`);
             const dataPoints = scheduleData.map(d => d.pages);
-            const backgroundColors = scheduleData.map((d, i) => d.type === 'break' ? '#EF9A9A' : (i === 0 ? '#8D6E63' : '#D7CCC8'));
+            
+            const backgroundColors = dataPoints.map((_, i) => 
+                i === activeIndex ? '#8D6E63' : '#E5E7EB'
+            );
 
+            if (workloadChart) workloadChart.destroy();
             workloadChart = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: labels, datasets: [{ label: '독서 분량 (페이지)', data: dataPoints, backgroundColor: backgroundColors, borderRadius: 6, hoverBackgroundColor: '#5D4037' }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => `${ctx.raw} 페이지` } } }, scales: { y: { beginAtZero: true, grid: { color: '#F3F4F6' }, title: { display: true, text: '페이지', font: { size: 12, weight: 'bold' } } }, x: { grid: { display: false } } }, onClick: (e, elements) => { if (elements.length > 0) selectSession(elements[0].index); } }
+                data: { labels: labels, datasets: [{ label: '독서 분량', data: dataPoints, backgroundColor: backgroundColors, borderRadius: 6 }] },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    plugins: { legend: { display: false }, tooltip: { enabled: true } }, 
+                    scales: { y: { beginAtZero: true, grid: { color: '#F3F4F6' }, title: { display: true, text: '페이지', font: { size: 10 } } }, x: { grid: { display: false } } },
+                    onClick: (e, elements) => { 
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            if (idx === activeIndex && (idx === 3 || idx === 4 || idx === 5)) { 
+                                showCuteWarning(e.native.clientX, e.native.clientY);
+                            }
+                        }
+                    } 
+                }
             });
         }
 
-        function highlightChart(index) {
-            if (!workloadChart) return;
-            workloadChart.data.datasets[0].backgroundColor = scheduleData.map((d, i) => d.type === 'break' ? (i === index ? '#E53935' : '#EF9A9A') : (i === index ? '#8D6E63' : '#D7CCC8'));
-            workloadChart.update();
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
+            activeIndex = getInitialSelectedIndex();
             renderScheduleList();
             renderAssignmentsArchive();
             updateDetailView();
