@@ -124,7 +124,7 @@
 
     <header class="bg-[#5D4037] text-white py-8 px-4 shadow-lg">
         <div class="max-w-6xl mx-auto text-left">
-            <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1">2026 언약가족</h2>
+            <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1 text-left">2026 언약가족</h2>
             <h1 class="text-3xl md:text-4xl font-bold mb-2 text-left">언약가족 디딤돌</h1>
             <p class="text-[#EFEBE9] opacity-90 text-sm md:text-base max-w-2xl text-left">
                 하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 8주간의 여정입니다.
@@ -138,7 +138,7 @@
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div class="card p-6 border-t-4 border-[#8D6E63] text-left">
                 <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
-                    <span class="text-xl mr-2">📚</span> 훈련 방법
+                    <span class="text-xl mr-2 text-left">📚</span> 훈련 방법
                 </h3>
                 <ul class="space-y-3 text-sm text-left text-gray-700">
                     <li><strong>사전 준비:</strong> 매주 정해진 분량의 교재 정독 및 과제 작성</li>
@@ -149,21 +149,21 @@
 
             <div class="card p-6 border-t-4 border-[#A1887F] shadow-lg text-left">
                 <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
-                    <span class="text-xl mr-2">🗺️</span> 연간 로드맵
+                    <span class="text-xl mr-2 text-left">🗺️</span> 연간 로드맵
                 </h3>
                 <div class="space-y-2 text-left">
                     <div class="bg-[#FAFAF9] p-2 rounded border text-xs text-left">
-                        <span class="font-bold text-[#8D6E63]">1학기:</span> 복음의 기초 및 제자훈련 원리
+                        <span class="font-bold text-[#8D6E63] text-left">1학기:</span> 복음의 기초 및 제자훈련 원리
                     </div>
                     <div class="bg-white p-2 rounded border text-xs opacity-60 text-left">
-                        <span class="font-bold text-gray-400">2학기:</span> 본격적인 영성 훈련 및 사역 실습
+                        <span class="font-bold text-gray-400 text-left">2학기:</span> 본격적인 영성 훈련 및 사역 실습
                     </div>
                 </div>
             </div>
 
             <div class="card p-6 border-t-4 border-[#D7CCC8] text-left">
                 <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
-                    <span class="text-xl mr-2">✅</span> 수료 조건
+                    <span class="text-xl mr-2 text-left">✅</span> 수료 조건
                 </h3>
                 <div class="space-y-2 text-xs text-left text-gray-700">
                     <p>• 출석: 총 8회 중 6회 이상</p>
@@ -176,8 +176,8 @@
         <!-- Main Dashboard -->
         <section>
             <div class="mb-4 text-left">
-                <h3 class="text-2xl font-bold text-[#3E2723]">실시간 훈련 가이드</h3>
-                <p class="text-sm text-[#8D6E63] font-bold">"중간에 꺾이지 않는 마음이 중요합니다 (현재 날짜에 맞춰 자동 활성화됩니다)"</p>
+                <h3 class="text-2xl font-bold text-[#3E2723] text-left">실시간 훈련 가이드</h3>
+                <p class="text-sm text-[#8D6E63] font-bold text-left">"중간에 꺾이지 않는 마음이 중요합니다 (현재 날짜에 맞춰 자동 활성화됩니다)"</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -185,13 +185,14 @@
                 <!-- Left Nav -->
                 <div class="lg:col-span-5 relative">
                     <div class="timeline-line"></div>
-                    <div id="schedule-list" class="space-y-4 relative z-10">
+                    <div id="schedule-list" class="space-y-4 relative z-10 text-left">
                     </div>
                 </div>
 
-                <!-- Right Content -->
+                <!-- Right View Area -->
                 <div class="lg:col-span-7 flex flex-col gap-8 text-left">
                     
+                    <!-- Current Training Detail Card -->
                     <div id="detail-card" class="card card-featured p-8 min-h-[220px]">
                         <div class="mb-6 text-left">
                             <h2 id="detail-main-title" class="text-3xl font-bold text-[#3E2723] mb-1 text-left">이번 주 훈련</h2>
@@ -200,18 +201,18 @@
                         
                         <div class="bg-[#FAFAF9] p-6 rounded-lg mb-4 border border-gray-100 text-left">
                             <h4 id="detail-session-name" class="text-xl font-bold text-gray-800 mb-4 underline decoration-[#D7CCC8] decoration-4 underline-offset-4 text-left">세션명</h4>
-                            <p id="detail-desc" class="text-base text-gray-600 leading-relaxed text-left">내용 설명</p>
+                            <p id="detail-desc" class="text-base text-gray-600 leading-relaxed text-left text-left">내용 설명</p>
                         </div>
-                        <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex flex-wrap items-center gap-3 text-left">
                             <div class="flex items-center gap-2 text-xs text-gray-800 bg-white border border-gray-200 p-2 rounded w-fit text-left font-medium">
                                 <span>📖 범위:</span>
-                                <span id="detail-range" class="font-bold">범위 표시</span>
-                                <span id="detail-pages" class="ml-2 bg-[#EFEBE9] px-1 rounded text-[#5D4037]">0쪽</span>
+                                <span id="detail-range" class="font-bold text-left">범위 표시</span>
+                                <span id="detail-pages" class="ml-2 bg-[#EFEBE9] px-1 rounded text-[#5D4037] text-left">0쪽</span>
                             </div>
                             <div class="flex items-center gap-2 text-xs text-blue-700 bg-blue-50 border border-blue-100 p-2 rounded w-fit font-bold text-left">
                                 <span>📅 하루 권장 독서량:</span>
-                                <span id="detail-daily-avg">0쪽</span>
-                                <span class="text-[10px] font-normal opacity-70">(6일 기준)</span>
+                                <span id="detail-daily-avg" class="text-left">0쪽</span>
+                                <span class="text-[10px] font-normal opacity-70 text-left">(6일 기준)</span>
                             </div>
                         </div>
                     </div>
@@ -219,24 +220,25 @@
                     <!-- Assignments Section -->
                     <div class="space-y-4 text-left">
                         <h3 class="text-xl font-bold text-[#5D4037] flex items-center gap-2 text-left">
-                            <span>📝</span> 주차별 과제물 아카이브
+                            <span class="text-left">📝</span> 주차별 과제물 아카이브
                         </h3>
                         
                         <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r shadow-sm text-left">
-                            <h5 class="text-amber-800 font-bold text-sm mb-1 flex items-center gap-2 text-left">💡 과제 수행 가이드</h5>
-                            <p class="text-sm text-amber-900 leading-relaxed text-left">정답 찾기가 아닙니다. 책을 읽으면서 충분히 생각하고, 질문에 대한 나만의 답을 정리해서 제출해 주세요. (모든 주차 클릭 가능)</p>
+                            <h5 class="text-amber-800 font-bold text-sm mb-1 flex items-center gap-2 text-left text-left">💡 과제 수행 가이드</h5>
+                            <p class="text-sm text-amber-900 leading-relaxed text-left text-left">정답 찾기가 아닙니다. 책을 읽으면서 충분히 생각하고, 질문에 대한 나만의 답을 정리해서 제출해 주세요. (모든 주차 클릭 가능)</p>
                         </div>
 
                         <div id="assignments-archive-container" class="space-y-4 text-left">
                         </div>
                     </div>
 
-                    <div class="card p-6">
+                    <!-- Workload Chart -->
+                    <div class="card p-6 text-left">
                         <div class="flex justify-between items-center mb-4 text-left">
-                            <h4 class="font-bold text-gray-700 text-sm text-left">📊 주차별 독서 부하량 (페이지)</h4>
-                            <span class="text-xs text-gray-400">성장과 성숙을 위한 거룩한 부담감</span>
+                            <h4 class="font-bold text-gray-700 text-sm text-left text-left">📊 주차별 독서 부하량 (페이지)</h4>
+                            <span class="text-xs text-gray-400 text-left">성장과 성숙을 위한 거룩한 부담감</span>
                         </div>
-                        <div class="chart-container">
+                        <div class="chart-container text-left">
                             <canvas id="workloadChart"></canvas>
                         </div>
                     </div>
@@ -267,12 +269,12 @@
                     { cat: "서론", q: "저자는 1세대 제자훈련이 \"성경 전체의 메시지가 아니라 한 부분에 기초했다\"고 말합니다. '복음'에는 기초했으나 '하나님나라'를 놓쳤다는 것이 어떤 차이를 만들었습니까?" },
                     { cat: "서론", q: "저자는 '학생'과 '제자'를 구분하면서, 제자훈련의 본질적 특성이 '재생산'이라고 말합니다. 왜 목회자가 가르치는 것으로 끝나는 것은 제자훈련이 아닐까요?" },
                     { cat: "1장: 예수, 생명의 밥", q: "저자는 '아르토스'의 정확한 번역이 '떡'이나 '빵'이 아니라 '밥'이라고 주장합니다. 이 번역의 차이가 신앙 이해에 어떤 영향을 준다고 생각합니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "제시된 네 가지 현상(반찬에 묻히다, 외식으로 대체되다, 밥맛이 똑같아지다, 식기 자랑에 밀리다) 중 서로 깊이 연결되어 있다고 생각하는 두 가지를 고르고 이유를 설명하십시오." },
+                    { cat: "1장: 예수, 생명의 밥", q: "저자가 제시하는 네 가지 현상(반찬에 묻히다, 외식으로 대체되다, 밥맛이 똑같아지다, 식기 자랑에 밀리다) 중 서로 가장 깊이 연결되어 있다고 생각하는 두 가지를 고르고 이유를 설명하십시오." },
                     { cat: "1장: 예수, 생명의 밥", q: "예수를 '언급하는 것'과 예수를 '알아가는 것'은 어떻게 다릅니까? 저자의 본문 내용을 근거로 이 차이를 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "생명의 밥의 세 가지 의미(살리는 밥, 살아가게 하는 밥, 살아 있는 밥) 중 하나라도 빠지면 어떤 문제가 생깁니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "마가복음 1:15에서 '회개'는 단순히 잘못을 뉘우치는 것이 아니라 '방향 전환'이라고 설명합니다. 인간은 스스로 방향을 돌이킨다고 해서 하나님나라에 들어갈 수 없다고도 합니다. 이 두 주장이 어떻게 연결됩니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "하나님나라에 속하면 \"어떤 면에서 세상살이가 좀 더 어려워진다\"고 말하면서, 동시에 \"넉넉히 이긴다\"고 합니다. 이 두 가지가 동시에 가능한 이유를 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "부활한 예수를 직접 만나지 못한 초대교회 다음 세대가 예수를 뜨겁게 사랑할 수 있었던 비밀은 무엇입니까?" },
+                    { cat: "1장: 예수, 생명의 밥", q: "저자는 생명의 밥의 세 가지 의미(살리는 밥, 살아가게 하는 밥, 살아 있는 밥)를 제시합니다. 이 셋의 순서가 중요한 이유는 무엇이며, 셋 중 하나라도 빠지면 어떤 문제가 생깁니까?" },
+                    { cat: "1장: 예수, 생명의 밥", q: "저자에 따르면 마가복음 1:15의 '회개'는 '방향 전환'이며 하나님의 다스림 아래로 들어가겠다는 의지의 표현입니다. 그런데 바로 이어서 저자는 \"불행히도 인간은 하나님나라에 들어갈 수 없는 존재\"라고 말합니다. 회개하라고 명령하시면서 동시에 인간이 스스로 들어갈 수 없게 한 이유는 무엇이며, 이 간격을 메우는 것이 무엇이라고 저자는 설명합니까?" },
+                    { cat: "1장: 예수, 생명의 밥", q: "저자는 하나님나라에 속하면 \"어떤 면에서 세상살이가 좀 더 어려워진다\"고 말하면서, 동시에 \"넉넉히 이긴다\"고 합니다. 이 두 가지가 동시에 가능한 이유를 설명하십시오." },
+                    { cat: "1장: 예수, 생명의 밥", q: "저자는 부활한 예수를 직접 만나지 못한 초대교회 다음 세대가 예수를 뜨겁게 사랑할 수 있었던 비밀이 있다고 합니다. 그 비밀은 무엇이며, 이것이 오늘날 우리에게도 동일하게 가능하다고 주장하는 근거는 무엇입니까?" },
                     { cat: "적용 질문", q: "네 가지 현상 중 나의 신앙생활에 가장 해당하는 것은 무엇입니까? 구체적인 예를 들고, 그것이 나의 신앙에 어떤 영향을 주고 있는지 나누어 보십시오." },
                     { cat: "적용 질문", q: "나는 \"내 삶과 인격에 흔적을 남긴 예수\"를 고백할 수 있습니까? 최근 삶에서 경험한 구체적 사례를 나누어 보십시오." }
                 ]
@@ -287,16 +289,16 @@
                 pages: 36,
                 questions: [
                     { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "저자는 나이아가라 폭포를 사진으로 아는 것과 현장에서 경험하는 것은 다르다고 말합니다. 그렇다면 구원을 '사진으로만 알고 있는' 그리스도인의 구체적 모습은 어떤 것이며, 그가 놓치고 있는 것은 정확히 무엇입니까?" },
-                    { cat: "2장", q: "바울은 구원 이전의 인간을 \"허물과 죄로 죽었다\"고 선언합니다. 저자는 이 '죽음'이 도덕적 실패가 아니라 영적 상태라고 설명합니다. 스스로 괜찮다고 느끼는 사람이 왜 오히려 심각한 상태일 수 있는지 설명하십시오." },
-                    { cat: "2장", q: "저자는 죄를 나무에 비유하면서, 겉으로 드러나는 죄의 행위(잎사귀)만 다루는 것이 왜 근본 해결이 안 되는지를 보여줍니다. '잎사귀만 다루는' 신앙생활의 구체적 예는 무엇이며, '뿌리'를 다루는 것은 어떻게 다릅니까?" },
-                    { cat: "2장", q: "에베소서 2:1-3과 4절 사이에는 '그러나'라는 한 단어가 있습니다. 만약 이 '그러나'가 없다면, 즉 인간의 상태 진단만 있고 하나님의 개입이 없다면, 기독교는 다른 종교의 자기 수양과 무엇이 다를 수 있겠습니까?" },
-                    { cat: "2장", q: "바울은 우리가 그리스도와 함께 '살아나고', '일으켜 세워지고', '하늘에 앉았다'고 과거 시제로 선언합니다. 현실의 우리는 여전히 죄를 짓고 약합니다. 저자는 이 괴리를 어떻게 설명하며, 이 괴리 앞에서 취해야 할 태도는 무엇입니까?" },
-                    { cat: "2장", q: "저자는 고급 승용차를 선물 받고도 트렁크의 공구함에만 마음을 빼앗기는 비유를 듭니다. 이 비유에서 '승용차'와 '공구함'은 각각 무엇을 가리키며, 오늘날 그리스도인의 가장 흔한 모습은 무엇입니까?" },
-                    { cat: "2장", q: "저자에 따르면, 성경이 말하는 믿음은 '하나님께서 하신 일에 대한 전인격적 반응'입니다. 한국 교회에서 '세게 믿으면 이루어진다'는 믿음과 이 전인격적 반응으로서의 믿음은 방향과 목적에서 어떻게 다릅니까?" },
-                    { cat: "2장", q: "저자는 물에 빠진 사람이 던져준 밧줄을 잡고 살았는데 \"내가 밧줄을 잘 잡아서 살았다\"고 말하는 사람은 없다고 합니다. 많은 그리스도인의 간증 구조가 9절(\"자랑할 수 없다\")과 어떻게 상충되는지 논하십시오." },
-                    { cat: "2장", q: "구원받은 자에게 일어나는 세 가지 변화(정체감, 사명감, 소속감)를 설명합니다. 만약 새로운 정체감은 있으나 소속감이 없는 사람, 또는 소속감은 있으나 사명감이 없는 사람이 있다면, 그의 신앙은 어떤 모습이 되겠습니까?" },
-                    { cat: "2장", q: "저자는 1세기 팔레스타인의 국지적 사건이 2천 년을 건너 우리에게 왔다는 사실에 감격합니다. 이것이 구원받은 자가 '왜 전도하고 선교해야 하는가'에 대한 본질적 답이 되는 이유를 설명하십시오." },
-                    { cat: "적용 질문", q: "하나님 말씀을 진심으로 들은 사람은 '기뻐함', '재헌신', '받아들임', '거절' 중 하나로 반응한다고 합니다. 2장을 읽은 지금 나는 어디에 해당하며, 왜 그런 반응이 나옵니까?" },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "바울은 구원 이전의 인간을 \"허물과 죄로 죽었다\"고 선언합니다. 저자는 이 '죽음'이 도덕적 실패가 아니라 영적 상태라고 설명하면서, 구원 이전의 상태를 '직면하고 절감하는 일이 반드시 필요하다'고 강조합니다. 왜 이 직면이 선행되어야 하며, 이를 건너뛸 때 저자가 지적하는 구체적인 문제는 무엇입니까?" },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "저자는 죄를 나무에 비유하면서, 겉으로 드러나는 죄의 행위(잎사귀)만 다루는 것이 왜 근본 해결이 안 되는지를 보여줍니다. '잎사귀만 다루는' 신앙생활의 구체적 예는 무엇이며, '뿌리'를 다루는 것은 어떻게 다릅니까?" },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "저자는 죄를 나무에 비유하면서, 대다수 고등 종교는 '마음공부나 수양'을 통해 내면세계를 정돈하려 한다고 설명합니다. 그러나 기독교는 '나무뿌리'에 해당하는 문제를 다룬다고 합니다. '잎사귀와 열매'(겉으로 드러난 행위), '기둥과 줄기'(내면의 마음), '뿌리'(하나님과의 관계)라는 세 층위의 차이가 왜 중요하며, 뿌리를 다루지 않으면 나머지를 아무리 다듬어도 왜 소용이 없는지 저자의 논리를 따라 설명하십시오." },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "에베소서 2:1-3과 4절 사이에는 '그러나'라는 한 단어가 있습니다. 만약 이 '그러나'가 없다면, 즉 인간의 상태 진단만 있고 하나님의 개입이 없다면, 기독교는 다른 종교의 자기 수양과 무엇이 다를 수 있겠습니까?" },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "바울은 우리가 그리스도와 함께 '살아나고', '일으켜 세워지고', '하늘에 앉았다'고 과거 시제로 선언합니다. 현실의 우리는 여전히 죄를 짓고 약합니다. 저자는 이 괴리를 어떻게 설명하며, 이 괴리 앞에서 취해야 할 태도는 무엇입니까?" },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "저자는 고급 승용차를 선물 받고도 트렁크의 공구함에만 마음을 빼앗기는 비유를 듭니다. 이 비유에서 '승용차'와 '공구함'은 각각 무엇을 가리키며, 오늘날 그리스도인의 가장 흔한 모습은 무엇입니까?" },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "저자에 따르면, 성경이 말하는 믿음은 '하나님께서 하신 일에 대한 전인격적 반응'입니다. 한국 교회에서 '세게 믿으면 이루어진다'는 믿음과 이 전인격적 반응으로서의 믿음은 방향과 목적에서 어떻게 다릅니까?" },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "저자는 물에 빠진 사람이 던져준 밧줄을 잡고 살았는데 \"내가 밧줄을 잘 잡아서 살았다\"고 말하는 사람은 없다고 합니다. 많은 그리스도인의 간증 구조가 9절(\"자랑할 수 없다\")과 어떻게 상충되는지 논하십시오." },
+                    { cat: "2장: 구원, 하나님의 뿌리칠 수 없는 사랑", q: "바울은 에베소서를 쓸 당시 옥에 갇혀 있었고, 예수를 따르는 이들은 그리스·로마 세계에서 극소수에 불과했습니다. 그런데 바울은 하나님의 은혜가 '장차 올 모든 세대'에게 드러날 것이라고 확신합니다. 이 확신의 근거는 무엇이며, 저자가 이 본문에서 감격하는 이유를 설명하십시오." },
+                    { cat: "적용 질문", q: "저자는 하나님 말씀을 진심으로 들은 사람은 '기뻐함', '재헌신', '받아들임', '거절' 중 하나로 반응한다고 합니다. 2장을 읽은 지금 나는 어디에 해당하며, 왜 그런 반응이 나옵니까?" },
                     { cat: "적용 질문", q: "저자는 믿음을 번지점프(결단)와 수영(훈련)에 비유합니다. 나는 구원의 풍성함을 '물 위에 떠 있기만 하는 수준'으로 누리고 있습니까, 아니면 '헤엄쳐 나아가는 수준'입니까? 무엇이 더 필요합니까?" }
                 ]
             },
@@ -385,7 +387,7 @@
                 div.innerHTML = `
                     <div class="flex justify-between items-center text-left">
                         <div class="flex-grow text-left">
-                            <span class="text-[10px] font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} uppercase tracking-wide">
+                            <span class="text-[10px] font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} uppercase tracking-wide text-left">
                                 ${statusTag}
                             </span>
                             <h4 class="font-bold text-[#3E2723] text-sm md:text-base leading-tight text-left">${item.title}</h4>
@@ -393,8 +395,8 @@
                                 📖 ${pageVolumeText}
                             </div>
                         </div>
-                        <div class="text-right ml-2 min-w-[50px]">
-                            <div class="text-xs font-mono font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'}">${item.date}</div>
+                        <div class="text-right ml-2 min-w-[50px] text-left">
+                            <div class="text-xs font-mono font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} text-left">${item.date}</div>
                         </div>
                     </div>
                 `;
@@ -434,12 +436,12 @@
                 cardDiv.innerHTML = `
                     <button onclick="toggleAssignment(${index})" class="w-full flex items-center justify-between p-7 bg-[#FAFAF9] hover:bg-[#F5F5F0] transition-colors border-b border-gray-100 text-left">
                         <div class="flex items-center text-left">
-                            <span class="text-2xl mr-4">${isActive ? '📝' : '📖'}</span>
+                            <span class="text-2xl mr-4 text-left">${isActive ? '📝' : '📖'}</span>
                             <div class="text-left">
-                                <h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1 text-left">${item.id}주차 과제물</h4>
+                                <h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1 text-left">${item.title.split(':')[0]} 과제물</h4>
                                 <div class="flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-800 font-medium text-left">
-                                    <span>${item.date} | ${item.pageString}</span>
-                                    <span class="text-blue-700 font-bold">| 하루 ${dailyAvg}p씩</span>
+                                    <span class="text-left">${item.date} | ${item.pageString}</span>
+                                    <span class="text-blue-700 font-bold text-left">| 하루 ${dailyAvg}p씩</span>
                                 </div>
                             </div>
                         </div>
