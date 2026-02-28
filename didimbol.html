@@ -3,510 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 언약가족 '디딤돌' 제자훈련 대시보드</title>
+    <title>2026 언약가족 '디딤돌' 제자훈련 통합 대시보드</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #F8F8F5; color: #4A4A4A; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
+        .card-featured { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border: 1px solid rgba(161, 136, 127, 0.2); }
+        .timeline-line { position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 2px; background-color: #E5E7EB; z-index: 0; }
+        .active-session { border-left: 6px solid #8D6E63; background-color: #FFFFFF; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 10; }
+        .locked-nav-item { cursor: default !important; pointer-events: none; background-color: rgba(255, 255, 255, 0.5); opacity: 0.85; }
         
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #F5F5F0; 
-            color: #4A4A4A;
+        /* Fixed Box Closure: Prevent content leakage when height is 0 */
+        .assignment-content { 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            padding: 0 !important; /* Force no padding when closed */
         }
+        .assignment-open .assignment-content { 
+            max-height: 6000px; 
+        }
+
+        #cute-warning { position: fixed; pointer-events: none; background-color: #FFB300; color: white; padding: 0.75rem 1.25rem; border-radius: 20px; font-weight: bold; display: none; align-items: center; gap: 0.5rem; box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3); z-index: 9999; white-space: nowrap; opacity: 0; transition: opacity 0.2s ease, transform 0.2s ease; transform: translate(-50%, -100%) scale(0.5); }
+        #cute-warning.show { display: flex; opacity: 1; transform: translate(-50%, -120%) scale(1); }
+        .table-container { overflow-x: auto; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: #D7CCC8; border-radius: 4px; }
         
-        .card {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
+        /* Horizontal Progress Graph Styles */
+        .graph-header-row { display: flex; align-items: center; padding: 1rem 1rem 0.5rem 1rem; border-bottom: 2px solid #F1F1EF; background-color: #FDFCF9; }
+        .graph-row { display: flex; align-items: center; padding: 1.25rem 1rem; border-bottom: 1px solid #F1F1EF; transition: background-color 0.2s; }
+        .graph-row:hover { background-color: #FAFAF9; }
+        .student-name { width: 100px; font-weight: 700; font-size: 0.95rem; color: #3E2723; flex-shrink: 0; }
+        .graph-container { flex-grow: 1; display: flex; flex-direction: column; gap: 6px; }
+        .progress-bar-label { font-size: 10px; font-weight: 700; color: #9E9E9E; width: 30px; flex-shrink: 0; }
+        .progress-track { display: flex; flex-grow: 1; height: 16px; background-color: #EEEEEE; border-radius: 4px; overflow: hidden; gap: 2px; }
+        .progress-segment { flex: 1; cursor: pointer; transition: all 0.2s ease; position: relative; }
         
-        .card-featured {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(161, 136, 127, 0.2);
-        }
+        .week-number-label { flex: 1; text-align: center; font-size: 9px; font-weight: 800; color: #A1887F; }
+        
+        /* Attendance Colors */
+        .seg-att.active { background-color: #5D4037; }
+        .seg-att:not(.active):hover { background-color: #D7CCC8; }
+        
+        /* Assignment Colors */
+        .seg-ass.active { background-color: #689F38; }
+        .seg-ass:not(.active):hover { background-color: #C5E1A5; }
 
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 100%;
-            margin: 0 auto;
-            height: 250px;
-        }
-
-        .timeline-line {
-            position: absolute;
-            left: 1.25rem;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: #E5E7EB;
-            z-index: 0;
-        }
-
-        .active-session {
-            border-left: 6px solid #8D6E63; 
-            background-color: #FFFFFF;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        .locked-nav-item {
-            cursor: default !important;
-            pointer-events: none;
-            background-color: rgba(255, 255, 255, 0.5);
-            opacity: 0.85; 
-        }
-
-        .question-item {
-            border-bottom: 1px solid #F3F4F6;
-        }
-        .question-item:last-child {
-            border-bottom: none;
-        }
-
-        .assignment-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .assignment-open .assignment-content {
-            max-height: 5000px; 
-        }
-
-        #cute-warning {
-            position: fixed;
-            pointer-events: none;
-            background-color: #FFB300;
-            color: white;
-            padding: 0.75rem 1.25rem;
-            border-radius: 20px;
-            font-weight: bold;
-            display: none;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
-            z-index: 9999;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            transform: translate(-50%, -100%) scale(0.5);
-        }
-        #cute-warning.show {
-            display: flex;
-            opacity: 1;
-            transform: translate(-50%, -120%) scale(1);
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #D7CCC8;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #A1887F;
-        }
+        .total-badge { font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 10px; min-width: 40px; text-align: center; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col text-left">
 
-    <div id="cute-warning">
-        <span>😮</span>
-        <span>분량이 많아요! 미리 미리 하세요!</span>
-        <span>📚</span>
-    </div>
+    <div id="cute-warning"><span>😮</span><span>분량이 많아요! 미리 미리 하세요!</span><span>📚</span></div>
 
-    <header class="bg-[#5D4037] text-white py-8 px-4 shadow-lg">
-        <div class="max-w-6xl mx-auto text-left">
-            <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1 text-left">2026 언약가족</h2>
-            <h1 class="text-3xl md:text-4xl font-bold mb-2 text-left">언약가족 디딤돌</h1>
-            <p class="text-[#EFEBE9] opacity-90 text-sm md:text-base max-w-2xl text-left">
-                하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 8주간의 여정입니다.
-            </p>
+    <header class="bg-[#5D4037] text-white py-10 px-6 shadow-lg text-left">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end gap-4 text-left">
+            <div class="text-left">
+                <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1">2026 언약가족</h2>
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">언약가족 디딤돌</h1>
+                <p class="text-[#EFEBE9] opacity-90 text-sm max-w-2xl">하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 여정</p>
+            </div>
+            <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm border border-white/20 text-left">
+                <p class="text-xs text-[#D7CCC8] mb-1 italic">"중간에 꺾이지 않는 마음이 중요합니다"</p>
+                <p class="text-sm font-bold">제자훈련 8주 통합 대시보드</p>
+            </div>
         </div>
     </header>
 
-    <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full space-y-8 text-left">
+    <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full space-y-12 text-left">
 
-        <!-- Summary Cards -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div class="card p-6 border-t-4 border-[#8D6E63] text-left">
-                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
-                    <span class="text-xl mr-2 text-left">📚</span> 훈련 방법
-                </h3>
-                <ul class="space-y-3 text-sm text-left text-gray-700">
-                    <li><strong>사전 준비:</strong> 매주 정해진 분량의 교재 정독 및 과제 작성</li>
-                    <li><strong>함께하는 토의:</strong> 질문지를 바탕으로 공동체 안에서 나눔</li>
-                    <li><strong>영성 실습:</strong> 이론을 넘어 신앙의 습관을 형성합니다.</li>
+                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center">📚 훈련 방법</h3>
+                <ul class="space-y-2 text-sm text-gray-700">
+                    <li>• <strong>사전 준비:</strong> 매주 독서 및 과제 작성</li>
+                    <li>• <strong>함께하는 토의:</strong> 질문지 중심의 나눔</li>
+                    <li>• <strong>영성 실습:</strong> 일상 속 신앙 습관 형성</li>
                 </ul>
             </div>
+            <div class="card p-6 border-t-4 border-[#A1887F] text-left">
+                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">🗺️ 연간 로드맵</h3>
+                <p class="text-xs leading-relaxed text-gray-600"><strong>1학기:</strong> 복음의 기초 및 제자훈련 원리 (8주)<br><strong>2학기:</strong> 본격적인 영성 형성 및 사역 훈련</p>
+            </div>
+            <div class="card p-6 border-t-4 border-[#D7CCC8] text-left">
+                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center">✅ 수료 조건</h3>
+                <p class="text-xs text-gray-700 leading-relaxed">• 출석 6회 이상 & 과제 8회 전체 제출<br><span class="text-red-500 font-bold">• 3/1 휴강 기간 과제물 포함</span></p>
+            </div>
+        </section>
 
-            <div class="card p-6 border-t-4 border-[#A1887F] shadow-lg text-left">
-                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
-                    <span class="text-xl mr-2 text-left">🗺️</span> 연간 로드맵
-                </h3>
-                <div class="space-y-2 text-left">
-                    <div class="bg-[#FAFAF9] p-2 rounded border text-xs text-left">
-                        <span class="font-bold text-[#8D6E63] text-left">1학기:</span> 복음의 기초 및 제자훈련 원리
-                    </div>
-                    <div class="bg-white p-2 rounded border text-xs opacity-60 text-left">
-                        <span class="font-bold text-gray-400 text-left">2학기:</span> 본격적인 영성 훈련 및 사역 실습
-                    </div>
-                </div>
+        <!-- Schedule Section -->
+        <section class="space-y-6 text-left">
+            <div class="text-left border-b border-gray-200 pb-2">
+                <h3 class="text-2xl font-bold text-[#3E2723]">실시간 훈련 가이드</h3>
+                <p class="text-sm text-[#8D6E63] font-bold">"날짜에 맞춰 해당 주차가 자동으로 활성화됩니다"</p>
             </div>
 
-            <div class="card p-6 border-t-4 border-[#D7CCC8] text-left">
-                <h3 class="text-lg font-bold text-[#5D4037] mb-3 flex items-center text-left">
-                    <span class="text-xl mr-2 text-left">✅</span> 수료 조건
-                </h3>
-                <div class="space-y-2 text-xs text-left text-gray-700">
-                    <p>• 출석: 총 8회 중 6회 이상</p>
-                    <p>• 과제: 8회 전체 제출 (휴강 주 포함)</p>
-                    <p class="text-red-500 font-bold text-left">• 결석 시 보강 또는 대체 과제 필수</p>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 text-left">
+                <div class="lg:col-span-5 relative text-left">
+                    <div class="timeline-line"></div>
+                    <div id="schedule-list" class="space-y-4 relative z-10"></div>
+                </div>
+
+                <div class="lg:col-span-7 flex flex-col gap-8 text-left">
+                    <div id="detail-card" class="card card-featured p-8 min-h-[220px] text-left">
+                        <h2 id="detail-main-title" class="text-3xl font-bold text-[#3E2723] mb-1">이번 주 훈련</h2>
+                        <p id="detail-meta" class="text-sm text-gray-500 font-medium mb-6">날짜 | 페이지 범위</p>
+                        <div class="bg-[#FAFAF9] p-6 rounded-lg mb-6 border border-gray-100 text-left">
+                            <h4 id="detail-session-name" class="text-xl font-bold text-gray-800 mb-4 underline decoration-[#D7CCC8] decoration-4 underline-offset-4 text-left text-left">세션명</h4>
+                            <p id="detail-desc" class="text-base text-gray-600 leading-relaxed text-left">내용 설명</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3 text-left">
+                            <div class="flex items-center gap-2 text-xs text-gray-800 bg-white border border-gray-200 p-2 rounded font-medium">
+                                <span>📖 범위:</span> <span id="detail-range" class="font-bold text-left">범위</span> <span id="detail-pages" class="ml-1 bg-[#EFEBE9] px-1 rounded text-[#5D4037]">0쪽</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-blue-700 bg-blue-50 border border-blue-100 p-2 rounded font-bold">
+                                <span>📅 하루 권장:</span> <span id="detail-daily-avg">0쪽</span> <span class="text-[10px] font-normal opacity-70">(6일 기준)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card p-6 text-left">
+                        <h4 class="font-bold text-gray-700 text-sm mb-4">📊 주차별 독서 부하량</h4>
+                        <div class="chart-container text-left"><canvas id="workloadChart"></canvas></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Main Dashboard -->
-        <section class="text-left">
-            <div class="mb-4 text-left">
-                <h3 class="text-2xl font-bold text-[#3E2723] text-left">실시간 훈련 가이드</h3>
-                <p class="text-sm text-[#8D6E63] font-bold text-left">"중간에 꺾이지 않는 마음이 중요합니다 (현재 날짜에 맞춰 자동 활성화됩니다)"</p>
+        <!-- Archive Section -->
+        <section class="space-y-6 text-left">
+            <div class="text-left border-b border-gray-200 pb-2">
+                <h3 class="text-2xl font-bold text-[#3E2723]">주차별 과제물 아카이브</h3>
+                <p class="text-sm text-gray-500 font-bold">모든 주차의 질문을 자유롭게 열람할 수 있습니다.</p>
             </div>
+            <div id="assignments-archive-container" class="space-y-4 text-left"></div>
+        </section>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-left">
-                
-                <!-- Left Nav -->
-                <div class="lg:col-span-5 relative text-left">
-                    <div class="timeline-line"></div>
-                    <div id="schedule-list" class="space-y-4 relative z-10 text-left">
+        <!-- Fixed Student Management -->
+        <section id="admin-view" class="pt-12 border-t-2 border-stone-200 space-y-6 text-left text-left">
+            <div class="text-left">
+                <h3 class="text-2xl font-bold text-[#3E2723]">훈련생 출석 및 과제</h3>
+                <p class="text-sm text-gray-500 mt-1">이름 옆 막대를 클릭하여 <span class="text-[#5D4037] font-bold">출석</span>과 <span class="text-[#689F38] font-bold">과제</span> 현황을 체크하세요.</p>
+            </div>
+            
+            <div class="card shadow-xl border border-stone-200 overflow-hidden">
+                <div class="graph-header-row text-left">
+                    <div class="w-[100px] shrink-0 font-bold text-[10px] text-[#8D6E63] uppercase tracking-tighter">훈련생 성함</div>
+                    <div class="flex-grow flex flex-col gap-1 pr-[45px]">
+                        <div class="w-full flex pl-[30px] gap-2">
+                            <div class="week-number-label">W1</div><div class="week-number-label">W2</div><div class="week-number-label">W3</div><div class="week-number-label">W4</div>
+                            <div class="week-number-label">W5</div><div class="week-number-label">W6</div><div class="week-number-label">W7</div><div class="week-number-label">W8</div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Right View Area -->
-                <div class="lg:col-span-7 flex flex-col gap-8 text-left">
-                    
-                    <!-- Current Training Detail Card -->
-                    <div id="detail-card" class="card card-featured p-8 min-h-[220px] text-left">
-                        <div class="mb-6 text-left">
-                            <h2 id="detail-main-title" class="text-3xl font-bold text-[#3E2723] mb-1 text-left text-left">이번 주 훈련</h2>
-                            <p id="detail-meta" class="text-sm text-gray-500 font-medium text-left text-left">날짜 | 페이지 범위</p>
-                        </div>
-                        
-                        <div class="bg-[#FAFAF9] p-6 rounded-lg mb-4 border border-gray-100 text-left">
-                            <h4 id="detail-session-name" class="text-xl font-bold text-gray-800 mb-4 underline decoration-[#D7CCC8] decoration-4 underline-offset-4 text-left text-left text-left">세션명</h4>
-                            <p id="detail-desc" class="text-base text-gray-600 leading-relaxed text-left text-left text-left">내용 설명</p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-3 text-left">
-                            <div class="flex items-center gap-2 text-xs text-gray-800 bg-white border border-gray-200 p-2 rounded w-fit text-left font-medium">
-                                <span>📖 범위:</span>
-                                <span id="detail-range" class="font-bold text-left">범위 표시</span>
-                                <span id="detail-pages" class="ml-2 bg-[#EFEBE9] px-1 rounded text-[#5D4037] text-left">0쪽</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-xs text-blue-700 bg-blue-50 border border-blue-100 p-2 rounded w-fit font-bold text-left">
-                                <span>📅 하루 권장 독서량:</span>
-                                <span id="detail-daily-avg" class="text-left">0쪽</span>
-                                <span class="text-[10px] font-normal opacity-70 text-left text-left">(6일 기준)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Assignments Section -->
-                    <div class="space-y-4 text-left">
-                        <h3 class="text-xl font-bold text-[#5D4037] flex items-center gap-2 text-left">
-                            <span class="text-left">📝</span> 주차별 과제물 아카이브
-                        </h3>
-                        
-                        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r shadow-sm text-left">
-                            <h5 class="text-amber-800 font-bold text-sm mb-1 flex items-center gap-2 text-left text-left text-left text-left">💡 과제 수행 가이드</h5>
-                            <p class="text-sm text-amber-900 leading-relaxed text-left text-left text-left text-left">정답 찾기가 아닙니다. 책을 읽으면서 충분히 생각하고, 질문에 대한 나만의 답을 정리해서 제출해 주세요. (모든 주차 클릭 가능)</p>
-                        </div>
-
-                        <div id="assignments-archive-container" class="space-y-4 text-left">
-                        </div>
-                    </div>
-
-                    <!-- Workload Chart -->
-                    <div class="card p-6 text-left text-left text-left">
-                        <div class="flex justify-between items-center mb-4 text-left text-left text-left">
-                            <h4 class="font-bold text-gray-700 text-sm text-left text-left text-left text-left">📊 주차별 독서 부하량 (페이지)</h4>
-                            <span class="text-xs text-gray-400 text-left text-left text-left">성장과 성숙을 위한 거룩한 부담감</span>
-                        </div>
-                        <div class="chart-container text-left text-left text-left">
-                            <canvas id="workloadChart"></canvas>
-                        </div>
-                    </div>
-
+                <div id="status-graph-list" class="flex flex-col bg-white text-left">
+                    <div class="p-20 text-center text-stone-300 italic">데이터 로딩 중...</div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="bg-[#3E2723] text-[#D7CCC8] py-10 mt-12 text-center text-left">
-        <p class="text-sm text-center">2026 언약가족 디딤돌</p>
-        <p class="text-xs opacity-50 mt-2 text-center text-center text-center">함께 지어져 가는 소망의 공동체</p>
+    <footer class="bg-[#3E2723] text-[#D7CCC8] py-12 text-center text-left">
+        <p class="text-sm">2026 언약가족 디딤돌</p>
+        <p class="text-xs opacity-50 mt-2">함께 지어져 가는 소망의 공동체</p>
     </footer>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'discipleship-2026-v5-final';
+
         const scheduleData = [
             {
-                id: 1,
-                date: "2월 22일",
-                range: "서론 + 1장",
-                pageString: "p.12~61",
-                title: "1주차: 들어가며 + 예수, 생명의 밥",
-                desc: "한국 교회의 위기 진단과 예수 복음의 본질을 직시하며 제자훈련의 필요성을 배웁니다.",
-                pages: 50,
+                id: 1, date: "2월 22일", range: "서론 + 1장", pageString: "p.12~61", title: "1주차: 들어가며 + 예수, 생명의 밥",
+                desc: "한국 교회의 위기 진단과 예수 복음의 본질을 직시하며 제자훈련의 필요성을 배웁니다.", pages: 50,
                 questions: [
-                    { cat: "서론", q: "“기독교가 원래부터 견지해온 메시지 그 자체”에 생존의 길이 있음에도 불구하고, 그 메시지를 이미 알고 있는 한국 교회가 위기에 처한 이유는 무엇입니까? 본문의 분석을 근거로 설명하십시오." },
-                    { cat: "서론", q: "1세대 제자훈련이 성경 전체가 아닌 한 부분에만 기초했다라는 지적과 관련하여, ‘복음’에는 기초했으나 ‘하나님나라’를 놓친 결과가 구체적으로 어떤 차이를 만들었는지 찾아 쓰십시오." },
-                    { cat: "서론", q: "‘학생’과 ‘제자’의 구분에서 제자훈련의 본질적 특성을 ‘재생산’으로 정의할 때, 가르치는 것으로 끝나는 과정이 왜 제자훈련이 아닌 ‘리더십 훈련 코스’에 불과한지 본문의 논리에 따라 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "‘아르토스’를 ‘떡’이나 ‘빵’이 아닌 ‘밥’으로 번역해야 한다는 주장은 우리의 신앙 이해에 실질적으로 어떤 영향을 준다고 생각합니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "네 가지 현상(반찬, 외식, 밥맛, 식기)을 통해 지적하는 오늘날 그리스도인의 근본 문제는 무엇이며, 이 진단을 굳이 네 가지 비유로 나누어 제시한 이유는 무엇입니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "예수를 주로 고백하고 노래하지만 더 이상 그분을 흠모하거나 알아가지 않는 현상을 고려할 때, 예수를 ‘언급하는 것’과 ‘알아가는 것’의 본질적인 차이는 무엇입니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "생명의 밥이 가진 세 가지 의미(살리는, 살아가게 하는, 살아 있는 밥)가 각각 중요한 이유는 무엇이며, 이 중 하나라도 결여될 때 그리스도인의 삶에 어떤 문제가 발생합니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "마가복음 1:15의 ‘회개’가 하나님의 다스림 안으로 들어가는 의지의 표현임에도 불구하고, 인간 스스로는 하나님나라에 들어갈 수 없다고 설명하는 이유는 무엇입니까? 또한 이 간격을 메우는 해답은 무엇입니까?" },
-                    { cat: "1장: 예수, 생명의 밥", q: "하나님나라에 속할 때 세상살이가 더 어려워짐과 동시에 ‘넉넉히 이기는 삶’(롬 8:36-37)이 가능한 이유를 본문의 논리에 따라 설명하십시오." },
-                    { cat: "1장: 예수, 생명의 밥", q: "부활한 예수를 직접 보지 못한 초대교회 다음 세대가 예수를 뜨겁게 사랑할 수 있었던 비밀은 무엇이며, 오늘날 우리에게도 이것이 동일하게 가능하다고 보는 근거는 무엇입니까?" },
-                    { cat: "적용 질문", q: "네 가지 현상(**①반찬에 묻히다, ②외식으로 대체되다, ③밥맛이 똑같아지다, ④식기 자랑에 밀리다**) 중 나의 신앙생활에 가장 가깝게 해당되는 것은 무엇입니까? 구체적인 예를 들어 그 영향력을 나누어 보십시오." },
-                    { cat: "적용 질문", q: "“내 삶과 인격에 흔적을 남긴 예수”를 개인적으로 고백할 수 있습니까? 최근 삶에서 경험한 구체적인 사례를 나누어 보거나, 없다면 그 이유를 성찰해 보십시오." }
+                    { cat: "Q1", q: "“기독교가 원래부터 견지해온 메시지 그 자체”에 생존의 길이 있음에도 불구하고, 그 메시지를 이미 알고 있는 한국 교회가 위기에 처한 이유는 무엇입니까? 본문의 분석을 근거로 설명하십시오." },
+                    { cat: "Q2", q: "1세대 제자훈련이 성경 전체가 아닌 한 부분에만 기초했다라는 지적과 관련하여, ‘복음’에는 기초했으나 ‘하나님나라’를 놓친 결과가 구체적으로 어떤 차이를 만들었는지 찾아 쓰십시오." },
+                    { cat: "Q3", q: "‘학생’과 ‘제자’의 구분에서 제자훈련의 본질적 특성을 ‘재생산’으로 정의할 때, 가르치는 것으로 끝나는 과정이 왜 제자훈련이 아닌 ‘리더십 훈련 코스’에 불과한지 본문의 논리에 따라 설명하십시오." },
+                    { cat: "Q4", q: "‘아르토스’를 ‘떡’이나 ‘빵’이 아닌 ‘밥’으로 번역해야 한다는 주장은 우리의 신앙 이해에 실질적으로 어떤 영향을 준다고 생각합니까?" },
+                    { cat: "Q5", q: "네 가지 현상(반찬, 외식, 밥맛, 식기)을 통해 지적하는 오늘날 그리스도인의 근본 문제는 무엇이며, 이 진단을 굳이 네 가지 비유로 나누어 제시한 이유는 무엇입니까?" },
+                    { cat: "Q6", q: "예수를 주로 고백하고 노래하지만 더 이상 그분을 흠모하거나 알아가지 않는 현상을 고려할 때, 예수를 ‘언급하는 것’과 ‘알아가는 것’의 본질적인 차이는 무엇입니까?" },
+                    { cat: "Q7", q: "생명의 밥이 가진 세 가지 의미(살리는, 살아가게 하는, 살아 있는 밥)가 각각 중요한 이유는 무엇이며, 이 중 하나라도 결여될 때 그리스도인의 삶에 어떤 문제가 발생합니까?" },
+                    { cat: "Q8", q: "마가복음 1:15의 ‘회개’가 하나님의 다스림 안으로 들어가는 의지의 표현임에도 불구하고, 인간 스스로는 하나님나라에 들어갈 수 없다고 설명하는 이유는 무엇입니까? 또한 이 간격을 메우는 해답은 무엇입니까?" },
+                    { cat: "Q9", q: "하나님나라에 속할 때 세상살이가 더 어려워짐과 동시에 ‘넉넉히 이기는 삶’(롬 8:36-37)이 가능한 이유를 본문의 논리에 따라 설명하십시오." },
+                    { cat: "Q10", q: "부활한 예수를 직접 보지 못한 초대교회 다음 세대가 예수를 뜨겁게 사랑할 수 있었던 비밀은 무엇이며, 오늘날 우리에게도 이것이 동일하게 가능하다고 보는 근거는 무엇입니까?" },
+                    { cat: "Q11", q: "네 가지 현상(**①반찬에 묻히다, ②외식으로 대체되다, ③밥맛이 똑같아지다, ④식기 자랑에 밀리다**) 중 나의 신앙생활에 가장 가깝게 해당되는 것은 무엇입니까? 구체적인 예를 들어 그 영향력을 나누어 보십시오." },
+                    { cat: "Q12", q: "“내 삶과 인격에 흔적을 남긴 예수”를 개인적으로 고백할 수 있습니까? 최근 삶에서 경험한 구체적인 사례를 나누어 보거나, 없다면 그 이유를 성찰해 보십시오." }
                 ]
             },
             {
-                id: 2,
-                date: "3월 8일",
-                range: "2장",
-                pageString: "p.62~97",
-                title: "2장 (휴강주차): 구원, 하나님의 사랑",
-                desc: "3월 1일은 휴강이지만 2장 독서 과제는 필수입니다. 구원의 본질을 사진이 아닌 생생한 체험으로 마주하며 묵상합니다.",
-                pages: 36,
-                questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }]
+                id: 2, date: "3월 8일", range: "2장", pageString: "p.62~97", title: "2주차: 구원, 하나님의 사랑",
+                desc: "3월 1일은 휴강이지만 2장 독서 과제는 필수입니다. 구원의 본질을 사진이 아닌 생생한 체험으로 마주하며 묵상합니다.", pages: 36,
+                questions: [
+                    { cat: "Q1", q: "구원의 도리를 설명하는 많은 성경 본문 중에서 에베소서 2:1-10을 “가장 탁월한 본문”이라고 단언합니다. 요한복음 3:16이나 로마서와 비교할 때 이 본문을 그토록 높이 평가하는 이유를 찾아보고, 이 본문의 세 부분 구조(1-3절, 4-6절, 7-10절)가 구원을 온전히 이해하는 데 왜 꼭 필요한지 설명해 보세요." },
+                    { cat: "Q2", q: "나이아가라 폭포를 멀리서 내려다봤을 때는 “감흥이 없었다”고 하면서, 허리케인 데크에서는 “표현할 수 없는 감동에 휩싸였다”고 말합니다. 이 경험을 그리스도인의 삶에 연결시킨 구체적 이유를 찾아보고, “들어서 지식으로는 알지만, 능력과 기쁨, 감격을 누리지 못하는” 모습이 당신의 신앙 어디에서 발견되는지 돌아보세요." },
+                    { cat: "Q3", q: "바울은 에베소서 2장 2-3절에서 세상 풍조를 “따르고”, 공중의 권세 잡은 자를 “따르고”, 육신의 욕심을 “따라”, 육체와 마음이 원하는 대로 “따라” 살았다고 네 차례나 “따랐다”는 표현을 반복합니다. 사람들이 “내 인생의 주인은 나”라고 주장하지만 실제로는 자기 욕망 하나 조절하지 못한다고 말하는데, “따랐다”를 반복한 의도는 무엇이며, “주인이라 여기지만 실제로는 종으로 사는” 모습이 당신의 삶에서는 어떤 형태로 나타나고 있는지 생각해 보세요." },
+                    { cat: "Q4", q: "죄를 나무에 비유하여 열매·잎사귀(행위), 줄기·기둥(마음), 뿌리(하나님과의 관계 단절)의 세 층위로 설명합니다. “마음수양을 철저히 해서 성현의 마음을 가졌다 해도, 하나님을 모르거나 무시한다면 인간 존재의 뿌리가 썩은 것이다”라고 말하는데, 일반 사회와 다른 종교가 다루는 죄의 차원과 기독교가 다루는 죄의 차원이 어떻게 다른지 본문에 근거하여 자신의 언어로 설명해 보세요." },
+                    { cat: "Q5", q: "“구원 이전의 상태를 절감하지 않으면 구원은 피상적이고 생명력 없는 죽은 교리에 불과하다”고 강조합니다. 모태신앙인과 문화적 그리스도인에게 구원의 기쁨이 드문 구체적 까닭은 무엇이며, “하나님 없는 실존을 정직하게 직면하고 절감할 때에야 비로소” 무엇이 가능해지는지 정리해 보세요. 이미 오래 믿어온 사람이 이 직면과 절감을 새롭게 경험하려면 어떤 태도가 필요할까요?" },
+                    { cat: "Q6", q: "에베소서 2장 4절의 “그러나”를 “신적 그러나”, “반가운 그러나”라고 부릅니다. 1-3절이 묘사하는 인간의 상태를 충분히 이해한 뒤에 이 “그러나”를 만날 때, 왜 이 한 단어가 그토록 강력한 전환점이 되는지 설명해 보세요. 또한 “그 크신 사랑”에서 “그”라는 관사에 주목하는 이유는 무엇이며, 하나님이 이 사랑을 외아들의 십자가라는 방식으로 “실증”하셔야만 했던 까닭을 정리해 보세요." },
+                    { cat: "Q7", q: "바울은 그리스도와 “함께 살려주셨고, 함께 일으키셨고, 함께 하늘에 앉게 하셨다”고 모두 과거 시제로 선언합니다. 이 동사들의 시제가 “이미 과거에 이루어진 일을 가리킨다”는 사실이 갖는 신학적 의미는 왜 중요하며, 이 세 가지 중 하나를 골라 그것이 당신의 현재 삶에서 어떤 구체적 의미를 갖는지 적어 보세요." },
+                    { cat: "Q8", q: "“은혜의 본령은 예수 그리스도 자체”라고 정의하며, 고급 자동차를 선물 받고도 트렁크의 공구함에만 마음을 빼앗기는 사람은 없을 것이라고 비유합니다. 많은 그리스도인이 예수 그리스도를 알아가려 하지 않고 필요한 것들만 구하는 이유가 무엇이라고 진단하며, “그 은혜”와 일반 은혜의 차이는 무엇인지 본문에서 정리해 보세요. 그리고 당신의 신앙에서 “자동차”와 “공구함”에 해당하는 것은 각각 무엇인지 생각해 보세요." },
+                    { cat: "Q9", q: "구원받은 사람에게 일어나는 세 가지 변화 중 정체감을 “내적 혁명”이라 부르고, 사명감을 “세상에서 살아가야 할 이유”라 하며, 소속감을 “각자 개인으로 사는 것이 아니라 공동체로 사는 것”이라 설명합니다. 이 세 가지가 각각 의미하는 바를 확인해 보고, 당신이 가장 약하다고 느끼는 영역 하나를 골라 그 이유와 함께 가르침에 비추어 어떻게 회복할 수 있을지 적어 보세요." },
+                    { cat: "Q10", q: "믿음의 시작을 번지점프에, 이후의 성장을 수영에 비유합니다. “물에 떴다는 것에만 만족하고 더 이상 앞으로 나아가지 않는” 그리스도인을 경고하면서, 당신은 지금 어느 단계에 있다고 생각하며 정체감·사명감·소속감에 걸맞게 성장하기 위해 구체적으로 어떤 연습과 훈련이 필요하다고 느끼나요?" }
+                ]
             },
-            { id: 3, date: "3월 15일", range: "3~4장", pageString: "p.98~167", title: "3주차: 하나님나라 + 제자훈련의 본질", desc: "하나님나라의 복음 전수와 제자훈련의 재생산 원리를 탐구합니다.", pages: 70, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
-            { id: 4, date: "3월 22일", range: "5~6장", pageString: "p.170~247", title: "4주차: 로마서로 보는 복음의 기초", desc: "로마서를 통해 하나님나라 복음의 신학적 기초를 다집니다.", pages: 78, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
-            { id: 5, date: "3월 29일", range: "7~8장", pageString: "p.250~333", title: "5주차: 성령, 교회, 그리고 세상", desc: "성령 안에서 살아가는 교회와 세상 속 그리스도인의 정체성을 묵상합니다.", pages: 84, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
-            { id: 6, date: "4월 5일", range: "9~10장", pageString: "p.336~423", title: "6주차: 영성과 복음 전수하는 삶", desc: "영적 성장의 원리와 복음을 흘려보내는 전수자의 삶을 배웁니다.", pages: 88, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
-            { id: 7, date: "4월 12일", range: "11~12장", pageString: "p.424~497", title: "7주차: 한 사람 세우기 (일대일 양육)", desc: "일대일 양육의 실제와 영적 깊이를 더하는 원리를 배웁니다.", pages: 74, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] },
-            { id: 8, date: "4월 19일", range: "13~14장", pageString: "p.500~571", title: "8주차: 소망의 공동체 및 전체 마무리", desc: "공동체 비전을 공유하며 8주간의 제자훈련을 마무리합니다.", pages: 72, questions: [{ cat: "안내", q: "질문지가 업데이트될 예정입니다." }] }
+            { id: 3, date: "3월 15일", range: "3~4장", title: "3주차: 하나님나라 + 제자훈련의 본질", desc: "하나님나라 전수와 제자훈련의 재생산 원리를 탐구합니다.", pages: 70, questions: [{cat:"Q", q:"업데이트 예정"}] },
+            { id: 4, date: "3월 22일", range: "5~6장", title: "4주차: 로마서로 보는 복음의 기초", desc: "로마서를 통해 복음의 신학적 기초를 다집니다.", pages: 78, questions: [{cat:"Q", q:"업데이트 예정"}] },
+            { id: 5, date: "3월 29일", range: "7~8장", title: "5주차: 성령, 교회, 그리고 세상", desc: "성령 안에서 살아가는 교회와 세상 속 정체성을 묵상합니다.", pages: 84, questions: [{cat:"Q", q:"업데이트 예정"}] },
+            { id: 6, date: "4월 5일", range: "9~10장", title: "6주차: 영성과 복음 전수하는 삶", desc: "영적 성장의 원리와 복음 전수자의 삶을 배웁니다.", pages: 88, questions: [{cat:"Q", q:"업데이트 예정"}] },
+            { id: 7, date: "4월 12일", range: "11~12장", title: "7주차: 한 사람 세우기 (일대일 양육)", desc: "일대일 양육의 실제와 영적 깊이를 더하는 원리를 배웁니다.", pages: 74, questions: [{cat:"Q", q:"업데이트 예정"}] },
+            { id: 8, date: "4월 19일", range: "13~14장", title: "8주차: 소망의 공동체 및 전체 마무리", desc: "공동체 비전을 공유하며 제자훈련을 마무리합니다.", pages: 72, questions: [{cat:"Q", q:"업데이트 예정"}] }
         ];
 
-        let activeIndex = 0; 
+        let activeIndex = 0;
+        let workloadChart;
 
-        function parseScheduleDate(dateStr) {
-            const matches = dateStr.match(/(\d+)월\s*(\d+)일/);
-            if (!matches) return null;
-            return new Date(2026, parseInt(matches[1]) - 1, parseInt(matches[2]));
+        window.toggleAssignment = (idx) => {
+            const all = document.querySelectorAll('[id^="assignment-card-"]');
+            const target = document.getElementById(`assignment-card-${idx}`);
+            if (!target) return;
+            const isOpen = target.classList.contains('assignment-open');
+            all.forEach(c => c.classList.remove('assignment-open'));
+            document.querySelectorAll('.arrow-icon').forEach(a => a.classList.remove('rotate-180'));
+            if (!isOpen) { 
+                target.classList.add('assignment-open'); 
+                const arrow = target.querySelector('.arrow-icon');
+                if (arrow) arrow.classList.add('rotate-180');
+            }
+        };
+
+        window.toggleAttendance = async (sid, wid, current) => {
+            if (!auth.currentUser) return;
+            let next = [...current]; const idx = next.indexOf(wid);
+            if (idx > -1) next.splice(idx, 1); else next.push(wid);
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', sid), { attendance: next });
+        };
+
+        window.toggleHW = async (sid, wid, current) => {
+            if (!auth.currentUser) return;
+            let next = [...current]; const idx = next.indexOf(wid);
+            if (idx > -1) next.splice(idx, 1); else next.push(wid);
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', sid), { assignments: next });
+        };
+
+        async function run() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else { await signInAnonymously(auth); }
+
+                // Updated Initial Student Seeding (Alphabetical)
+                const studentNames = ["배상묵", "배주헌", "윤혜진", "이정숙", "임용빈", "전미나", "전한나", "최봄", "홍기범"];
+                const firstWeekAttenders = ["배상묵", "전한나", "임용빈", "전미나", "최봄", "배주헌"];
+                const firstWeekHWDone = ["전미나", "최봄", "배주헌", "임용빈"];
+
+                for (const name of studentNames) {
+                    const sid = `st-${name.replace(/\s+/g, '')}`;
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', sid);
+                    const snap = await getDoc(docRef);
+                    if (!snap.exists()) {
+                        const att = firstWeekAttenders.includes(name) ? [1] : [];
+                        const hw = firstWeekHWDone.includes(name) ? [1] : [];
+                        await setDoc(docRef, { name, attendance: att, assignments: hw });
+                    }
+                }
+
+                activeIndex = getActiveIndex();
+                renderUI();
+                initCharts();
+
+                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'students'), (snapshot) => {
+                    const list = [];
+                    snapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+                    list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    renderStatusGraphs(list);
+                }, (err) => console.error("Sync Error:", err));
+
+            } catch (err) { console.error("Init Error:", err); }
         }
 
-        function getInitialSelectedIndex() {
-            const now = new Date();
-            let idx = 0;
+        function parseDate(dStr) {
+            const m = dStr.match(/(\d+)월\s*(\d+)일/);
+            return m ? new Date(2026, parseInt(m[1]) - 1, parseInt(m[2])) : null;
+        }
+
+        function getActiveIndex() {
+            const now = new Date(); let idx = 0;
             for (let i = 0; i < scheduleData.length; i++) {
-                const sessionDate = parseScheduleDate(scheduleData[i].date);
-                if (sessionDate && now >= new Date(sessionDate.getTime() - 7 * 24 * 60 * 60 * 1000)) {
-                    idx = i;
-                } else {
-                    break;
-                }
+                const sDate = parseDate(scheduleData[i].date);
+                if (sDate && now >= new Date(sDate.getTime() - 7 * 24 * 60 * 60 * 1000)) idx = i; else break;
             }
             return idx;
         }
 
-        function showCuteWarning(x, y) {
-            const warning = document.getElementById('cute-warning');
-            if (!warning) return;
-            warning.style.left = `${x}px`;
-            warning.style.top = `${y}px`;
-            warning.style.display = 'flex';
-            setTimeout(() => warning.classList.add('show'), 10);
-            setTimeout(() => {
-                warning.classList.remove('show');
-                setTimeout(() => warning.style.display = 'none', 200);
-            }, 3000);
-        }
-
-        function toggleAssignment(idx) {
-            const allAssignmentCards = document.querySelectorAll('[id^="assignment-card-"]');
-            const targetCard = document.getElementById(`assignment-card-${idx}`);
-            if (!targetCard) return;
-
-            const isClosing = targetCard.classList.contains('assignment-open');
-
-            allAssignmentCards.forEach(card => {
-                card.classList.remove('assignment-open');
-                const arrow = card.querySelector('.rotate-180');
-                if (arrow) arrow.classList.remove('rotate-180');
-            });
-
-            if (!isClosing) {
-                targetCard.classList.add('assignment-open');
-                const arrow = targetCard.querySelector('button span.arrow-icon');
-                if (arrow) arrow.classList.add('rotate-180');
-            }
-        }
-
-        function renderScheduleList() {
-            const listEl = document.getElementById('schedule-list');
-            if (!listEl) return;
-            listEl.innerHTML = '';
-            scheduleData.forEach((item, index) => {
+        function renderUI() {
+            // Schedule
+            document.getElementById('schedule-list').innerHTML = scheduleData.map((item, index) => {
                 const isActive = index === activeIndex;
-                const div = document.createElement('div');
-                div.className = `relative pl-8 py-4 pr-4 rounded transition-all duration-200 text-left text-left ${
-                    isActive ? 'active-session' : 'locked-nav-item'
-                }`;
-
-                const dot = document.createElement('div');
-                dot.className = `absolute left-[1.25rem] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transform -translate-x-1/2 transition-colors ${
-                    isActive ? 'bg-[#8D6E63] border-[#5D4037]' : 'bg-gray-200 border-gray-300'
-                }`;
-
                 const statusTag = isActive ? '⭐ 진행 중' : (index < activeIndex ? '✅ 완료' : '⌛ 진행 예정');
-                const pageVolumeText = `${item.pageString} (${item.pages}p 분량)`;
+                return `<div class="relative pl-8 py-4 pr-4 rounded transition-all duration-200 text-left ${isActive ? 'active-session' : 'locked-nav-item'}">
+                        <div class="absolute left-[1.25rem] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transform -translate-x-1/2 ${isActive ? 'bg-[#8D6E63] border-[#5D4037]' : 'bg-gray-200 border-gray-300'}"></div>
+                        <div class="flex justify-between items-center"><div class="text-left"><span class="text-[10px] font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} uppercase text-left">${statusTag}</span><h4 class="font-bold text-[#3E2723] text-sm md:text-base leading-tight text-left">${item.title}</h4><div class="text-[11px] text-gray-800 font-medium mt-1 text-left">📖 ${item.pages}p 분량</div></div><div class="text-right ml-2 min-w-[50px] text-xs font-mono font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} text-left text-left">${item.date}</div></div></div>`;
+            }).join('');
 
-                div.innerHTML = `
-                    <div class="flex justify-between items-center text-left text-left text-left">
-                        <div class="flex-grow text-left text-left text-left">
-                            <span class="text-[10px] font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} uppercase tracking-wide text-left text-left text-left">
-                                ${statusTag}
-                            </span>
-                            <h4 class="font-bold text-[#3E2723] text-sm md:text-base leading-tight text-left text-left text-left text-left">${item.title}</h4>
-                            <div class="text-[11px] text-gray-800 font-medium mt-1 text-left text-left text-left text-left">
-                                📖 ${pageVolumeText}
-                            </div>
-                        </div>
-                        <div class="text-right ml-2 min-w-[50px] text-left text-left text-left text-left">
-                            <div class="text-xs font-mono font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} text-left text-left text-left text-left">${item.date}</div>
-                        </div>
-                    </div>
-                `;
-                div.appendChild(dot);
-                listEl.appendChild(div);
-            });
-        }
+            const item = scheduleData[activeIndex];
+            document.getElementById('detail-meta').textContent = `${item.date} | ${item.pages}p 분량`;
+            document.getElementById('detail-session-name').textContent = item.title;
+            document.getElementById('detail-desc').innerHTML = item.desc.replace(/\*\*(.*?)\*\*/g, '<strong class="text-red-600">$1</strong>');
+            document.getElementById('detail-range').textContent = item.range;
+            document.getElementById('detail-pages').textContent = `${item.pages}쪽`;
+            document.getElementById('detail-daily-avg').textContent = `${(item.pages / 6).toFixed(1)}쪽`;
 
-        function renderAssignmentsArchive() {
-            const archiveContainer = document.getElementById('assignments-archive-container');
-            if (!archiveContainer) return;
-            archiveContainer.innerHTML = '';
-            
-            scheduleData.forEach((item, index) => {
+            // Questions Archive
+            document.getElementById('assignments-archive-container').innerHTML = scheduleData.map((item, index) => {
                 const isActive = index === activeIndex;
-                const cardDiv = document.createElement('div');
-                cardDiv.id = `assignment-card-${index}`;
-                cardDiv.className = `card border border-[#D7CCC8] overflow-hidden ${isActive ? 'assignment-open' : ''}`;
-                
-                let questionsHTML = '';
-                let currentCat = '';
-                item.questions.forEach((qObj, qIdx) => {
-                    if (qObj.cat !== currentCat) {
-                        currentCat = qObj.cat;
-                        questionsHTML += `<div class="font-bold text-[#5D4037] text-base uppercase mt-6 mb-3 bg-[#EFEBE9] px-3 py-1.5 rounded inline-block border-l-4 border-[#8D6E63] text-left text-left text-left text-left">${currentCat}</div>`;
-                    }
-                    questionsHTML += `
-                        <div class="question-item py-6 flex gap-5 text-left text-left text-left text-left text-left">
-                            <span class="text-[#8D6E63] font-bold min-w-[28px] text-xl text-left text-left text-left text-left text-left">${qIdx + 1}.</span>
-                            <p class="text-black font-medium leading-relaxed text-lg text-left text-left text-left text-left text-left">${qObj.q}</p>
+                let qHTML = '';
+                item.questions.forEach((qObj) => {
+                    qHTML += `
+                        <div class="question-item py-8 first:pt-2 last:border-0 border-b border-stone-100 text-left text-left text-left">
+                            <div class="flex items-center gap-4 mb-4 text-left">
+                                <div class="flex items-center justify-center bg-[#8D6E63] text-white w-10 h-10 rounded-full font-bold text-sm shadow-sm shrink-0 text-left">
+                                    ${qObj.cat}
+                                </div>
+                                <div class="h-px bg-stone-200 flex-grow"></div>
+                            </div>
+                            <p class="text-gray-800 font-medium leading-relaxed text-lg pl-1 text-left text-left">
+                                ${qObj.q}
+                            </p>
                         </div>
                     `;
                 });
-
-                const dailyAvg = (item.pages / 6).toFixed(1);
-
-                cardDiv.innerHTML = `
-                    <button onclick="toggleAssignment(${index})" class="w-full flex items-center justify-between p-7 bg-[#FAFAF9] hover:bg-[#F5F5F0] transition-colors border-b border-gray-100 text-left text-left text-left text-left text-left">
-                        <div class="flex items-center text-left text-left text-left text-left text-left text-left">
-                            <span class="text-2xl mr-4 text-left text-left text-left text-left text-left text-left">${isActive ? '📝' : '📖'}</span>
-                            <div class="text-left text-left text-left text-left text-left text-left">
-                                <h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1 text-left text-left text-left text-left text-left text-left text-left">${item.id}주차 과제물</h4>
-                                <div class="flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-800 font-medium text-left text-left text-left text-left text-left text-left text-left text-left">
-                                    <span class="text-left text-left text-left text-left text-left text-left text-left">${item.date} | ${item.pageString}</span>
-                                    <span class="text-blue-700 font-bold text-left text-left text-left text-left text-left text-left text-left text-left">| 하루 ${dailyAvg}p씩</span>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="arrow-icon text-2xl text-[#8D6E63] transition-transform duration-300 ${isActive ? 'rotate-180' : ''}">▼</span>
-                    </button>
-                    <div class="assignment-content text-left text-left text-left text-left text-left text-left">
-                        <div class="p-8 space-y-2 text-left text-left text-left text-left text-left text-left">
-                            ${questionsHTML}
-                        </div>
-                    </div>
-                `;
-                archiveContainer.appendChild(cardDiv);
-            });
+                return `<div id="assignment-card-${index}" class="card border border-[#D7CCC8] overflow-hidden ${isActive ? 'assignment-open' : ''} text-left"><button onclick="toggleAssignment(${index})" class="w-full flex items-center justify-between p-7 bg-[#FAFAF9] hover:bg-[#F5F5F0] transition-colors border-b border-gray-100 text-left text-left"><div class="flex items-center text-left text-left text-left"><span class="text-2xl mr-4 text-left text-left">${isActive ? '📝' : '📖'}</span><div class="text-left text-left text-left"><h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1 text-left">${item.id}주차 과제물</h4><div class="flex gap-x-3 text-sm text-gray-800 font-medium text-left"><span>${item.date}</span><span class="text-blue-700 font-bold text-left text-left">| 하루 ${(item.pages / 6).toFixed(1)}p씩</span></div></div></div><span class="arrow-icon text-2xl text-[#8D6E63] transition-transform duration-300 ${isActive ? 'rotate-180' : ''}">▼</span></button><div class="assignment-content text-left"><div class="px-8 pb-8 pt-4">${qHTML}</div></div></div>`;
+            }).join('');
         }
 
-        function updateDetailView() {
-            const item = scheduleData[activeIndex];
-            const detailCardEl = document.getElementById('detail-card');
-            if (!detailCardEl) return;
-            
-            const mainTitle = document.getElementById('detail-main-title');
-            const meta = document.getElementById('detail-meta');
-            const sName = document.getElementById('detail-session-name');
-            const desc = document.getElementById('detail-desc');
-            const range = document.getElementById('detail-range');
-            const pCount = document.getElementById('detail-pages');
-            const dailyAvgEl = document.getElementById('detail-daily-avg');
-
-            if (mainTitle) mainTitle.textContent = "이번 주 훈련";
-            if (meta) meta.textContent = `${item.date} | ${item.pageString}`;
-            if (sName) sName.textContent = item.title;
-            if (desc) desc.innerHTML = item.desc.replace(/\*\*(.*?)\*\*/g, '<strong class="text-red-600">$1</strong>');
-            if (range) range.textContent = item.range;
-            if (pCount) pCount.textContent = `${item.pages}쪽`;
-            
-            const avg = (item.pages / 6).toFixed(1);
-            if (dailyAvgEl) dailyAvgEl.textContent = `${avg}쪽`;
-        }
-
-        let workloadChart;
         function initCharts() {
-            const canvas = document.getElementById('workloadChart');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const labels = scheduleData.map(d => `W${d.id}`);
-            const dataPoints = scheduleData.map(d => d.pages);
-            
-            const backgroundColors = dataPoints.map((_, i) => 
-                i === activeIndex ? '#8D6E63' : '#E5E7EB'
-            );
-
+            const ctx = document.getElementById('workloadChart').getContext('2d');
             if (workloadChart) workloadChart.destroy();
             workloadChart = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: labels, datasets: [{ label: '독서 분량', data: dataPoints, backgroundColor: backgroundColors, borderRadius: 6 }] },
-                options: { 
-                    responsive: true, maintainAspectRatio: false, 
-                    plugins: { legend: { display: false }, tooltip: { enabled: true } }, 
-                    scales: { y: { beginAtZero: true, grid: { color: '#F3F4F6' }, title: { display: true, text: '페이지', font: { size: 10 } } }, x: { grid: { display: false } } },
-                    onClick: (e, elements) => { 
-                        if (elements.length > 0) {
-                            const idx = elements[0].index;
-                            if (idx === activeIndex && (idx === 3 || idx === 4 || idx === 5)) { 
-                                showCuteWarning(e.native.clientX, e.native.clientY);
-                            }
-                        }
-                    } 
+                data: { labels: scheduleData.map(d => `W${d.id}`), datasets: [{ data: scheduleData.map(d => d.pages), backgroundColor: scheduleData.map((_, i) => i === activeIndex ? '#8D6E63' : '#E5E7EB'), borderRadius: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                    onClick: (e, elements) => { if (elements.length > 0) { const idx = elements[0].index; if (idx === activeIndex && (idx >= 3 && idx <= 5)) { const w = document.getElementById('cute-warning'); w.style.left = `${e.native.clientX}px`; w.style.top = `${e.native.clientY}px`; w.style.display = 'flex'; setTimeout(() => w.classList.add('show'), 10); setTimeout(() => { w.classList.remove('show'); setTimeout(() => w.style.display = 'none', 200); }, 3000); } } }
                 }
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            activeIndex = getInitialSelectedIndex();
-            renderScheduleList();
-            renderAssignmentsArchive();
-            updateDetailView();
-            initCharts();
-        });
+        function renderStatusGraphs(students) {
+            const container = document.getElementById('status-graph-list');
+            if (students.length === 0) { container.innerHTML = '<div class="p-20 text-center text-stone-300">명단을 동기화 중입니다...</div>'; return; }
+
+            container.innerHTML = students.map(s => {
+                const attData = s.attendance || [];
+                const assData = s.assignments || [];
+
+                let attTrackHtml = '';
+                for(let i=1; i<=8; i++) {
+                    const active = attData.includes(i) ? 'active' : '';
+                    attTrackHtml += `<div class="progress-segment seg-att ${active}" onclick="toggleAttendance('${s.id}', ${i}, ${JSON.stringify(attData)})"></div>`;
+                }
+
+                let assTrackHtml = '';
+                for(let i=1; i<=8; i++) {
+                    const active = assData.includes(i) ? 'active' : '';
+                    assTrackHtml += `<div class="progress-segment seg-ass ${active}" onclick="toggleHW('${s.id}', ${i}, ${JSON.stringify(assData)})"></div>`;
+                }
+
+                return `
+                    <div class="graph-row text-left">
+                        <div class="student-name text-left text-left">${s.name}</div>
+                        <div class="graph-container">
+                            <div class="flex items-center gap-3">
+                                <div class="progress-bar-label text-left">출석</div>
+                                <div class="progress-track">${attTrackHtml}</div>
+                                <div class="total-badge text-[#5D4037] bg-[#EFEBE9] text-left">${attData.length}/8</div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="progress-bar-label text-left">과제</div>
+                                <div class="progress-track">${assTrackHtml}</div>
+                                <div class="total-badge text-[#689F38] bg-[#F1F8E9] text-left">${assData.length}/8</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        run();
     </script>
 </body>
 </html>
