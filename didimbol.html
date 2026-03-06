@@ -15,20 +15,25 @@
         .active-session { border-left: 6px solid #8D6E63; background-color: #FFFFFF; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 10; }
         .locked-nav-item { cursor: default !important; pointer-events: none; background-color: rgba(255, 255, 255, 0.5); opacity: 0.85; }
         
-        /* Assignment Content Box fixed for absolute hiding when closed */
-        .assignment-content { 
-            max-height: 0; 
-            overflow: hidden; 
+        /* CSS Grid Accordion: 닫혔을 때 잔상이 1px도 남지 않도록 완벽 차단 */
+        .assignment-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s ease-out;
+        }
+        .assignment-content > div {
+            overflow: hidden;
             visibility: hidden;
             opacity: 0;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0s 0.4s;
-            padding: 0 !important;
+            transition: opacity 0.3s ease, visibility 0s 0.35s;
         }
-        .assignment-open .assignment-content { 
-            max-height: 8000px; 
+        .assignment-open .assignment-content {
+            grid-template-rows: 1fr;
+        }
+        .assignment-open .assignment-content > div {
             visibility: visible;
             opacity: 1;
-            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease, visibility 0s;
+            transition: opacity 0.35s ease 0.1s, visibility 0s 0s;
         }
 
         #cute-warning { position: fixed; pointer-events: none; background-color: #FFB300; color: white; padding: 0.75rem 1.25rem; border-radius: 20px; font-weight: bold; display: none; align-items: center; gap: 0.5rem; box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3); z-index: 9999; white-space: nowrap; opacity: 0; transition: opacity 0.2s ease, transform 0.2s ease; transform: translate(-50%, -100%) scale(0.5); }
@@ -48,11 +53,11 @@
         
         .week-number-label { flex: 1; text-align: center; font-size: 9px; font-weight: 800; color: #A1887F; }
         
-        /* Attendance Colors */
+        /* Attendance Colors (Deep Brown) */
         .seg-att.active { background-color: #5D4037; }
         .seg-att:not(.active):hover { background-color: #D7CCC8; }
         
-        /* Assignment Colors */
+        /* Assignment Colors (Mature Green) */
         .seg-ass.active { background-color: #689F38; }
         .seg-ass:not(.active):hover { background-color: #C5E1A5; }
 
@@ -63,14 +68,14 @@
 
     <div id="cute-warning"><span>😮</span><span>분량이 많아요! 미리 미리 하세요!</span><span>📚</span></div>
 
-    <header class="bg-[#5D4037] text-white py-10 px-6 shadow-lg text-left">
+    <header class="bg-[#5D4037] text-white py-10 px-6 shadow-lg">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end gap-4 text-left">
-            <div class="text-left">
+            <div>
                 <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1">2026 언약가족</h2>
                 <h1 class="text-3xl md:text-4xl font-bold mb-2">언약가족 디딤돌</h1>
                 <p class="text-[#EFEBE9] opacity-90 text-sm max-w-2xl text-left">하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 여정</p>
             </div>
-            <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm border border-white/20 text-left">
+            <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm border border-white/20">
                 <p class="text-xs text-[#D7CCC8] mb-1 italic">"중간에 꺾이지 않는 마음이 중요합니다"</p>
                 <p class="text-sm font-bold">제자훈련 8주 통합 대시보드</p>
             </div>
@@ -124,8 +129,8 @@
                             <div class="flex items-center gap-2 text-xs text-gray-800 bg-white border border-gray-200 p-2 rounded font-medium">
                                 <span>📖 범위:</span> <span id="detail-range" class="font-bold">범위</span> <span id="detail-pages" class="ml-1 bg-[#EFEBE9] px-1 rounded text-[#5D4037]">0쪽</span>
                             </div>
-                            <div class="flex items-center gap-2 text-xs text-blue-700 bg-blue-50 border border-blue-100 p-2 rounded font-bold">
-                                <span>📅 하루 권장:</span> <span id="detail-daily-avg">0쪽</span> <span class="text-[10px] font-normal opacity-70">(6일 기준)</span>
+                            <div class="flex items-center gap-2 text-xs text-blue-700 bg-white border border-blue-100 p-2 rounded font-bold">
+                                <span>📅 하루 권장:</span> <span id="detail-daily-avg">0쪽</span> <span class="text-[10px] font-normal opacity-70 text-gray-500">(6일 기준)</span>
                             </div>
                         </div>
                     </div>
@@ -165,7 +170,7 @@
                     </div>
                 </div>
                 <div id="status-graph-list" class="flex flex-col bg-white">
-                    <div class="p-20 text-center text-stone-300 italic">데이터 동기화 중...</div>
+                    <div class="p-20 text-center text-stone-400 font-medium">데이터를 동기화하고 있습니다...</div>
                 </div>
             </div>
         </section>
@@ -173,18 +178,18 @@
     </main>
 
     <footer class="bg-[#3E2723] text-[#D7CCC8] py-12 text-center text-left">
-    <footer class="bg-[#3E2723] text-[#D7CCC8] py-12 text-center text-left">
         <p class="text-sm">2026 언약가족 디딤돌</p>
         <p class="text-xs opacity-50 mt-2">함께 지어져 가는 소망의 공동체</p>
     </footer>
 
+    <!-- 동적 모듈 로딩 구조로 전환하여 화면 깨짐 완벽 방지 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         let db, auth;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'discipleship-2026-v9-final';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'discipleship-2026-v11-perfect';
 
         const scheduleData = [
             {
@@ -216,7 +221,7 @@
                     { cat: "Q5", q: "“구원 이전의 상태를 절감하지 않으면 구원은 피상적이고 생명력 없는 죽은 교리에 불과하다”고 강조합니다. 모태신앙인과 문화적 그리스도인에게 구원의 기쁨이 드문 구체적 까닭은 무엇이며, “하나님 없는 실존을 정직하게 직면하고 절감할 때에야 비로소” 무엇이 가능해지는지 정리해 보세요. 이미 오래 믿어온 사람이 이 직면과 절감을 새롭게 경험하려면 어떤 태도가 필요할까요?" },
                     { cat: "Q6", q: "에베소서 2장 4절의 “그러나”를 “신적 그러나”, “반가운 그러나”라고 부릅니다. 1-3절이 묘사하는 인간의 상태를 충분히 이해한 뒤에 이 “그러나”를 만날 때, 왜 이 한 단어가 그토록 강력한 전환점이 되는지 설명해 보세요. 또한 “그 크신 사랑”에서 “그”라는 관사에 주목하는 이유는 무엇이며, 하나님이 이 사랑을 외아들의 십자가라는 방식으로 “실증”하셔야만 했던 까닭을 정리해 보세요." },
                     { cat: "Q7", q: "바울은 그리스도와 “함께 살려주셨고, 함께 일으키셨고, 함께 하늘에 앉게 하셨다”고 모두 과거 시제로 선언합니다. 이 동사들의 시제가 “이미 과거에 이루어진 일을 가리킨다”는 사실이 갖는 신학적 의미는 왜 중요하며, 이 세 가지 중 하나를 골라 그것이 당신의 현재 삶에서 어떤 구체적 의미를 갖는지 적어 보세요." },
-                    { cat: "Q8", q: "“은혜의 본령은 예수 그리스도 자체”라고 정의하며, 고급 자동차를 선물 받고도 트렁크의 공구함에만 마음을 빼앗기는 사람은 없을 것이라고 비유합니다. 많은 그리스도인이 예수 그리스도를 알아가려 하지 않고 필요한 것들만 구하는 이유가 무엇이라고 진단하며, “그 은혜”와 일반 은혜의 차이는 무엇인지 본문에서 정리해 보세요. 그리고 당신의 신앙에서 “자동차”와 “공구함”에 해당하는 것은 각각 무엇인지 생각해 보세요." },
+                    { cat: "Q8", q: "“은혜의 본령은 예수 그리스도 자체”라고 정의하며, 고급 자동차를 선물 받고도 트렁크의 공구함에만 마음을 빼앗기는 사람은 없을 것이라고 비유합니다. 많은 그리스도인이 예수 그리스도를 알아가려 하지 않고 필요한 것들만 구하는 이유가 무엇이라고 진단하며, “그 은혜”와 일반 은혜의 차이는 무엇인지 정리해 보세요. 그리고 당신의 신앙에서 “자동차”와 “공구함”에 해당하는 것은 각각 무엇인지 생각해 보세요." },
                     { cat: "Q9", q: "구원받은 사람에게 일어나는 세 가지 변화 중 정체감을 “내적 혁명”이라 부르고, 사명감을 “세상에서 살아가야 할 이유”라 하며, 소속감을 “각자 개인으로 사는 것이 아니라 공동체로 사는 것”이라 설명합니다. 이 세 가지가 각각 의미하는 바를 확인해 보고, 당신이 가장 약하다고 느끼는 영역 하나를 골라 그 이유와 함께 가르침에 비추어 어떻게 회복할 수 있을지 적어 보세요." },
                     { cat: "Q10", q: "믿음의 시작을 번지점프에, 이후의 성장을 수영에 비유합니다. “물에 떴다는 것에만 만족하고 더 이상 앞으로 나아가지 않는” 그리스도인을 경고하면서, 당신은 지금 어느 단계에 있다고 생각하며 정체감·사명감·소속감에 걸맞게 성장하기 위해 구체적으로 어떤 연습과 훈련이 필요하다고 느끼나요?" }
                 ]
@@ -316,8 +321,30 @@
                             </div>
                         `;
                     });
-                    return `<div id="assignment-card-${index}" class="card border border-[#D7CCC8] overflow-hidden ${isActive ? 'assignment-open' : ''} text-left"><button onclick="toggleAssignment(${index})" class="w-full flex items-center justify-between p-7 bg-[#FAFAF9] hover:bg-[#F5F5F0] transition-colors border-b border-gray-100 text-left"><div class="flex items-center text-left">
-                    <span class="text-2xl mr-4 text-left">${isActive ? '📝' : '📖'}</span><div class="text-left text-left text-left"><h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1 text-left text-left">${week.id}주차 과제물</h4><div class="flex gap-x-3 text-sm text-gray-800 font-medium text-left"><span>${week.date}</span><span class="text-blue-700 font-bold text-left text-left">| 하루 ${(week.pages / 6).toFixed(1)}p씩</span></div></div></div><span class="arrow-icon text-2xl text-[#8D6E63] transition-transform duration-300 ${isActive ? 'rotate-180' : ''}">▼</span></button><div class="assignment-content text-left"><div class="px-8 pb-8 pt-4 text-left text-left text-left">${qHTML}</div></div></div>`;
+                    
+                    return `
+                    <div id="assignment-card-${index}" class="card border border-[#D7CCC8] overflow-hidden ${isActive ? 'assignment-open' : ''} text-left">
+                        <button onclick="toggleAssignment(${index})" class="w-full flex items-center justify-between p-7 bg-[#FAFAF9] hover:bg-[#F5F5F0] transition-colors border-b border-gray-100 text-left">
+                            <div class="flex items-center text-left">
+                                <span class="text-2xl mr-4 text-left">${isActive ? '📝' : '📖'}</span>
+                                <div class="text-left">
+                                    <h4 class="text-2xl font-bold text-[#5D4037] leading-tight mb-1 text-left">${week.id}주차 과제물</h4>
+                                    <div class="flex gap-x-3 text-sm text-gray-800 font-medium text-left">
+                                        <span>${week.date}</span>
+                                        <span class="text-blue-700 font-bold text-left text-left">| 하루 ${(week.pages / 6).toFixed(1)}p씩</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="arrow-icon text-2xl text-[#8D6E63] transition-transform duration-300 ${isActive ? 'rotate-180' : ''}">▼</span>
+                        </button>
+                        <div class="assignment-content text-left">
+                            <div class="text-left">
+                                <div class="px-8 pb-8 pt-4 bg-white text-left">
+                                    ${qHTML}
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
                 }).join('');
             }
         }
@@ -372,16 +399,15 @@
             }).join('');
         }
 
-        // Initialize purely as a front-end view first, then attach Firebase if available
         async function initApp() {
             activeIndex = getActiveIndex();
             renderUI();
             initCharts();
 
-            // Local test fallback data
+            // Local test fallback data - Updated '배주헌' to include week 2 assignment
             const fallbackStudents = [
                 { id: '1', name: '배상묵', attendance: [1], assignments: [1] },
-                { id: '2', name: '배주헌', attendance: [1], assignments: [2] },
+                { id: '2', name: '배주헌', attendance: [1], assignments: [1, 2] },
                 { id: '3', name: '윤혜진', attendance: [], assignments: [] },
                 { id: '4', name: '이정숙', attendance: [], assignments: [1] },
                 { id: '5', name: '임용빈', attendance: [1], assignments: [1] },
@@ -408,18 +434,13 @@
                     await signInAnonymously(auth); 
                 }
 
-                const studentNames = ["배상묵", "배주헌", "윤혜진", "이정숙", "임용빈", "전미나", "전한나", "최봄", "홍기범"];
-                const firstWeekAttenders = ["배상묵", "전한나", "임용빈", "전미나", "최봄", "배주헌"];
-                const firstWeekHWDone = ["전미나", "최봄", "배주헌", "임용빈"];
-
-                for (const name of studentNames) {
-                    const sid = `st-${name.replace(/\s+/g, '')}`;
+                // 클라우드 초기 명단 시딩 시 fallbackStudents를 기준으로 사용
+                for (const student of fallbackStudents) {
+                    const sid = `st-${student.name.replace(/\s+/g, '')}`;
                     const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', sid);
                     const snap = await getDoc(docRef);
                     if (!snap.exists()) {
-                        const att = firstWeekAttenders.includes(name) ? [1] : [];
-                        const hw = firstWeekHWDone.includes(name) ? [1] : [];
-                        await setDoc(docRef, { name, attendance: att, assignments: hw });
+                        await setDoc(docRef, { name: student.name, attendance: student.attendance, assignments: student.assignments });
                     }
                 }
 
@@ -439,7 +460,6 @@
             }
         }
 
-        // Run immediately
         initApp();
     </script>
 </body>
