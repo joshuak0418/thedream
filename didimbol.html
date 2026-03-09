@@ -73,7 +73,7 @@
             <div>
                 <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1">2026 언약가족</h2>
                 <h1 class="text-3xl md:text-4xl font-bold mb-2">언약가족 디딤돌</h1>
-                <p class="text-[#EFEBE9] opacity-90 text-sm max-w-2xl">하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 여정</p>
+                <p class="text-[#EFEBE9] opacity-90 text-sm max-w-2xl text-left">하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 여정</p>
             </div>
             <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm border border-white/20">
                 <p class="text-xs text-[#D7CCC8] mb-1 italic">"중간에 꺾이지 않는 마음이 중요합니다"</p>
@@ -164,8 +164,8 @@
                     <div class="w-[100px] shrink-0 font-bold text-[10px] text-[#8D6E63] uppercase tracking-tighter">훈련생 성함</div>
                     <div class="flex-grow flex flex-col gap-1 pr-[45px]">
                         <div class="w-full flex pl-[30px] gap-2">
-                            <div class="week-number-label">1주</div><div class="week-number-label">2주</div><div class="week-number-label">3주</div><div class="week-number-label">4주</div>
-                            <div class="week-number-label">5주</div><div class="week-number-label">6주</div><div class="week-number-label">7주</div><div class="week-number-label">8주</div>
+                            <div class="week-number-label">W1</div><div class="week-number-label">W2</div><div class="week-number-label">W3</div><div class="week-number-label">W4</div>
+                            <div class="week-number-label">W5</div><div class="week-number-label">W6</div><div class="week-number-label">W7</div><div class="week-number-label">W8</div>
                         </div>
                     </div>
                 </div>
@@ -182,7 +182,6 @@
         <p class="text-xs opacity-50 mt-2 text-center">함께 지어져 가는 소망의 공동체</p>
     </footer>
 
-    <!-- 동적 모듈 로딩 구조로 전환하여 화면 깨짐 완벽 방지 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -226,7 +225,22 @@
                     { cat: "Q10", q: "믿음의 시작을 번지점프에, 이후의 성장을 수영에 비유합니다. “물에 떴다는 것에만 만족하고 더 이상 앞으로 나아가지 않는” 그리스도인을 경고하면서, 당신은 지금 어느 단계에 있다고 생각하며 정체감·사명감·소속감에 걸맞게 성장하기 위해 구체적으로 어떤 연습과 훈련이 필요하다고 느끼나요?" }
                 ]
             },
-            { id: 3, date: "3월 15일", title: "3주차: 하나님나라 + 제자훈련의 본질", pages: 70, range: "3~4장", desc: "하나님나라 전수와 제자훈련의 재생산 원리를 탐구합니다.", questions: [{cat:"Q1", q:"질문지가 업데이트될 예정입니다."}] },
+            {
+                id: 3, date: "3월 15일", title: "3주차: 하나님나라 + 제자훈련의 본질", pages: 70, range: "3~4장",
+                desc: "하나님나라 전수와 제자훈련의 재생산 원리를 탐구합니다.",
+                questions: [
+                    { cat: "Q1", q: "성경을 읽는 시각에 따라 전혀 다른 결론에 이를 수 있다고 경고합니다. '예수의 눈으로 성경 읽기'란 무엇이며, 이 시각이 왜 중요합니까?" },
+                    { cat: "Q2", q: "'하나님나라'라는 단어가 구약성경에 나타나지 않음에도 불구하고, 하나님나라가 성경 전체를 관통하는 중심 사상인 이유는 무엇입니까? 그 논리를 따라 설명하십시오." },
+                    { cat: "Q3", q: "하나님나라가 '이미' 임했지만 '아직' 완전히 오지 않았다고 말합니다. 구약의 전통적 기대와 예수의 가르침은 어떻게 다릅니까? 예수께서 이 차이를 설명하기 위해 씨앗 비유를 사용하신 이유는 무엇이라고 생각합니까?" },
+                    { cat: "Q4", q: "하나님나라가 임한다는 소식이 \"결코 좋은 소식\"이 아님에도 불구하고, 이것이 '복음'(좋은 소식)이 되는 이유는 무엇입니까? 그 논리를 따라 설명하십시오." },
+                    { cat: "Q5", q: "\"복음은 심장, 하나님나라는 척추\"라는 비유가 의미하는 바는 무엇입니까? 심장만 있고 척추가 없는 경우와 그 반대의 경우에 발생하는 문제를 각각 설명하십시오." },
+                    { cat: "Q6", q: "하나님의 형상(Imago Dei)에 세 가지 의미가 있다고 설명합니다. 이 세 가지 중 '앞선 특징들의 핵심'이라고 말하는 것은 무엇이며, 그것이 왜 핵심입니까? 인간의 반역은 이 핵심을 어떻게 무너뜨렸습니까?" },
+                    { cat: "Q7", q: "한국 교회의 영성에 대한 오해를 넘어, '진정한 영성'이란 무엇이며 흔히 말하는 영성과 어떻게 다릅니까?" },
+                    { cat: "Q8", q: "'복음전수'라는 단어가 '복음전도'와 근본적으로 다른 점은 무엇입니까? 복음 전수의 세 가지 요소가 왜 하나라도 빠지면 안 되는지 설명하십시오." },
+                    { cat: "Q9", q: "\"복음과 하나님나라의 이혼\"이 초래하는 '개인적 경건주의'와 '복음 없는 사회운동' 중 나의 신앙은 어느 쪽에 더 가깝습니까? 균형 회복을 위해 필요한 것은 무엇입니까?" },
+                    { cat: "Q10", q: "예수를 닮아간다는 것은 '예수의 복음 위에 서기'와 '예수의 하나님나라를 살아내기'라는 두 면이 있습니다. 나는 어느 면에서 더 성장했고 어느 면이 부족한지 구체적인 사례를 들어 나누어 보십시오." }
+                ]
+            },
             { id: 4, date: "3월 22일", title: "4주차: 로마서로 보는 복음의 기초", pages: 78, range: "5~6장", desc: "로마서를 통해 복음의 신학적 기초를 다집니다.", questions: [{cat:"Q1", q:"질문지가 업데이트될 예정입니다."}] },
             { id: 5, date: "3월 29일", title: "5주차: 성령, 교회, 그리고 세상", pages: 84, range: "7~8장", desc: "성령 안에서 살아가는 교회와 세상 속 정체성을 묵상합니다.", questions: [{cat:"Q1", q:"질문지가 업데이트될 예정입니다."}] },
             { id: 6, date: "4월 5일", title: "6주차: 영성과 복음 전수하는 삶", pages: 88, range: "9~10장", desc: "영적 성장의 원리와 복음 전수자의 삶을 배웁니다.", questions: [{cat:"Q1", q:"질문지가 업데이트될 예정입니다."}] },
@@ -244,6 +258,7 @@
             const isOpen = target.classList.contains('assignment-open');
             all.forEach(c => c.classList.remove('assignment-open'));
             document.querySelectorAll('.arrow-icon').forEach(a => a.classList.remove('rotate-180'));
+            
             if (!isOpen) { 
                 target.classList.add('assignment-open'); 
                 const arrow = target.querySelector('.arrow-icon');
@@ -285,9 +300,18 @@
                 listEl.innerHTML = scheduleData.map((item, index) => {
                     const isActive = index === activeIndex;
                     const statusTag = isActive ? '⭐ 진행 중' : (index < activeIndex ? '✅ 완료' : '⌛ 진행 예정');
-                    return `<div class="relative pl-8 py-4 pr-4 rounded transition-all duration-200 text-left ${isActive ? 'active-session' : 'locked-nav-item'}">
+                    return `
+                        <div class="relative pl-8 py-4 pr-4 rounded transition-all duration-200 text-left ${isActive ? 'active-session' : 'locked-nav-item'}">
                             <div class="absolute left-[1.25rem] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transform -translate-x-1/2 ${isActive ? 'bg-[#8D6E63] border-[#5D4037]' : 'bg-gray-200 border-gray-300'}"></div>
-                            <div class="flex justify-between items-center text-left"><div class="text-left"><span class="text-[10px] font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} uppercase text-left">${statusTag}</span><h4 class="font-bold text-[#3E2723] text-sm md:text-base leading-tight text-left">${item.title}</h4><div class="text-[11px] text-gray-800 font-medium mt-1 text-left">📖 ${item.pages}p 분량</div></div><div class="text-right ml-2 min-w-[50px] text-xs font-mono font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} text-left">${item.date}</div></div></div>`;
+                            <div class="flex justify-between items-center text-left">
+                                <div class="text-left">
+                                    <span class="text-[10px] font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} uppercase text-left">${statusTag}</span>
+                                    <h4 class="font-bold text-[#3E2723] text-sm md:text-base leading-tight text-left">${item.title}</h4>
+                                    <div class="text-[11px] text-gray-800 font-medium mt-1 text-left">📖 ${item.pages}p 분량</div>
+                                </div>
+                                <div class="text-right ml-2 min-w-[50px] text-xs font-mono font-bold ${isActive ? 'text-[#8D6E63]' : 'text-gray-400'} text-left">${item.date}</div>
+                            </div>
+                        </div>`;
                 }).join('');
             }
 
@@ -315,9 +339,7 @@
                                     </div>
                                     <div class="h-px bg-stone-200 flex-grow"></div>
                                 </div>
-                                <p class="text-gray-800 font-medium leading-relaxed text-lg pl-1 text-left">
-                                    ${qObj.q}
-                                </p>
+                                <p class="text-gray-800 font-medium leading-relaxed text-lg pl-1 text-left">${qObj.q}</p>
                             </div>
                         `;
                     });
@@ -404,7 +426,7 @@
             renderUI();
             initCharts();
 
-            // Local test fallback data - 모든 학생 3주차 출석 추가 및 지정된 과제 제출 데이터 반영
+            // Local test fallback data - 3주차 전체 출석 및 2주차 과제물 제출 인원 업데이트 반영
             const fallbackStudents = [
                 { id: '1', name: '배상묵', attendance: [1, 3], assignments: [1, 2] },
                 { id: '2', name: '배주헌', attendance: [1, 3], assignments: [1, 2] },
@@ -434,7 +456,7 @@
                     await signInAnonymously(auth); 
                 }
 
-                // 클라우드 초기 시딩 (기존 데이터가 없을 때만 실행되므로, 변경 사항 강제 반영을 위해 직접 클릭을 권장합니다.)
+                // Initial Seeding
                 for (const student of fallbackStudents) {
                     const sid = `st-${student.name.replace(/\s+/g, '')}`;
                     const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', sid);
