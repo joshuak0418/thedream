@@ -73,7 +73,7 @@
             <div>
                 <h2 class="text-[#D7CCC8] text-sm font-semibold tracking-wider uppercase mb-1">2026 언약가족</h2>
                 <h1 class="text-3xl md:text-4xl font-bold mb-2">언약가족 디딤돌</h1>
-                <p class="text-[#EFEBE9] opacity-90 text-sm max-w-2xl text-left">하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 여정</p>
+                <p class="text-[#EFEBE9] opacity-90 text-sm max-w-2xl">하나님나라 복음을 깊이 이해하고, 주님의 제자로서 삶의 뿌리를 내리는 여정</p>
             </div>
             <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm border border-white/20">
                 <p class="text-xs text-[#D7CCC8] mb-1 italic">"중간에 꺾이지 않는 마음이 중요합니다"</p>
@@ -153,7 +153,7 @@
         </section>
 
         <!-- Attendance & Homework Table -->
-        <section id="admin-view" class="pt-12 border-t-2 border-stone-200 space-y-6 text-left pb-12">
+        <section id="admin-view" class="pt-12 border-t-2 border-stone-200 space-y-6 pb-12 text-left">
             <div class="text-left">
                 <h3 class="text-2xl font-bold text-[#3E2723]">훈련생 출석 및 과제</h3>
                 <p class="text-sm text-gray-500 mt-1">이름 옆 막대를 클릭하여 <span class="text-[#5D4037] font-bold">출석</span>과 <span class="text-[#689F38] font-bold">과제</span> 현황을 체크하세요.</p>
@@ -164,8 +164,8 @@
                     <div class="w-[100px] shrink-0 font-bold text-[10px] text-[#8D6E63] uppercase tracking-tighter">훈련생 성함</div>
                     <div class="flex-grow flex flex-col gap-1 pr-[45px]">
                         <div class="w-full flex pl-[30px] gap-2">
-                            <div class="week-number-label">W1</div><div class="week-number-label">W2</div><div class="week-number-label">W3</div><div class="week-number-label">W4</div>
-                            <div class="week-number-label">W5</div><div class="week-number-label">W6</div><div class="week-number-label">W7</div><div class="week-number-label">W8</div>
+                            <div class="week-number-label">1주</div><div class="week-number-label">2주</div><div class="week-number-label">3주</div><div class="week-number-label">4주</div>
+                            <div class="week-number-label">5주</div><div class="week-number-label">6주</div><div class="week-number-label">7주</div><div class="week-number-label">8주</div>
                         </div>
                     </div>
                 </div>
@@ -178,8 +178,8 @@
     </main>
 
     <footer class="bg-[#3E2723] text-[#D7CCC8] py-12 text-center text-left">
-        <p class="text-sm">2026 언약가족 디딤돌</p>
-        <p class="text-xs opacity-50 mt-2">함께 지어져 가는 소망의 공동체</p>
+        <p class="text-sm text-center">2026 언약가족 디딤돌</p>
+        <p class="text-xs opacity-50 mt-2 text-center">함께 지어져 가는 소망의 공동체</p>
     </footer>
 
     <!-- 동적 모듈 로딩 구조로 전환하여 화면 깨짐 완벽 방지 -->
@@ -404,17 +404,17 @@
             renderUI();
             initCharts();
 
-            // Local test fallback data - Updated with latest assignment records
+            // Local test fallback data - 모든 학생 3주차 출석 추가 및 지정된 과제 제출 데이터 반영
             const fallbackStudents = [
-                { id: '1', name: '배상묵', attendance: [1], assignments: [1] },
-                { id: '2', name: '배주헌', attendance: [1], assignments: [1, 2] },
-                { id: '3', name: '윤혜진', attendance: [], assignments: [1, 2] }, // Updated
-                { id: '4', name: '이정숙', attendance: [], assignments: [1] },
-                { id: '5', name: '임용빈', attendance: [1], assignments: [1] },
-                { id: '6', name: '전미나', attendance: [1], assignments: [1, 2] }, // Updated
-                { id: '7', name: '전한나', attendance: [1], assignments: [1] },
-                { id: '8', name: '최봄', attendance: [1], assignments: [1] },
-                { id: '9', name: '홍기범', attendance: [], assignments: [1, 2] }, // Updated
+                { id: '1', name: '배상묵', attendance: [1, 3], assignments: [1, 2] },
+                { id: '2', name: '배주헌', attendance: [1, 3], assignments: [1, 2] },
+                { id: '3', name: '윤혜진', attendance: [3], assignments: [1, 2] },
+                { id: '4', name: '이정숙', attendance: [3], assignments: [1, 2] },
+                { id: '5', name: '임용빈', attendance: [1, 3], assignments: [1, 2] },
+                { id: '6', name: '전미나', attendance: [1, 3], assignments: [1, 2] },
+                { id: '7', name: '전한나', attendance: [1, 3], assignments: [1, 2] },
+                { id: '8', name: '최봄', attendance: [1, 3], assignments: [1, 2] },
+                { id: '9', name: '홍기범', attendance: [3], assignments: [1, 2] },
             ];
 
             if (typeof __firebase_config === 'undefined') {
@@ -434,7 +434,7 @@
                     await signInAnonymously(auth); 
                 }
 
-                // Initial Seeding
+                // 클라우드 초기 시딩 (기존 데이터가 없을 때만 실행되므로, 변경 사항 강제 반영을 위해 직접 클릭을 권장합니다.)
                 for (const student of fallbackStudents) {
                     const sid = `st-${student.name.replace(/\s+/g, '')}`;
                     const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', sid);
